@@ -66,8 +66,8 @@ dependencies {
     implementation 'com.tencent:mmkv:1.2.12'
 
     // For debug online
-    implementation project(':libausbc')
+//    implementation project(':libausbc')
 
     // demo
-//    implementation 'com.github.jiangdongguo.AndroidUSBCamera:libausbc:3.3.3'
+    implementation 'com.github.jiangdongguo.AndroidUSBCamera:libausbc:3.3.3'
 }

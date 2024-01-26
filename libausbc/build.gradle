@@ -37,6 +37,7 @@ repositories {
 }
 
 dependencies {
+//    implementation project(':libnative')
     compile fileTree(dir: 'libs', include: ['*.aar'])
     implementation "androidx.appcompat:appcompat:${androidXVersion}"
     implementation "androidx.constraintlayout:constraintlayout:${constraintlayoutVersion}"

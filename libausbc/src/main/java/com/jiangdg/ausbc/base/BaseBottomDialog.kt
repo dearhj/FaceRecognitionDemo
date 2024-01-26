@@ -48,17 +48,17 @@ abstract class BaseBottomDialog: BottomSheetDialogFragment()  {
 
     override fun onStart() {
         super.onStart()
-        dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN)
-        val sheetDialog = dialog as BottomSheetDialog
-        sheetDialog.delegate.findViewById<FrameLayout>(R.id.design_bottom_sheet)?.apply {
-            background = ColorDrawable(Color.TRANSPARENT)
-            val params = layoutParams as CoordinatorLayout.LayoutParams
-            params.height = getPeekHeight()
-            layoutParams = params
-            mBehavior = BottomSheetBehavior.from(this)
-            mBehavior?.peekHeight = getPeekHeight()
-            mBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
-        }
+//        dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN)
+//        val sheetDialog = dialog as BottomSheetDialog
+//        sheetDialog.delegate.findViewById<FrameLayout>(R.id.design_bottom_sheet)?.apply {
+//            background = ColorDrawable(Color.TRANSPARENT)
+//            val params = layoutParams as CoordinatorLayout.LayoutParams
+//            params.height = getPeekHeight()
+//            layoutParams = params
+//            mBehavior = BottomSheetBehavior.from(this)
+//            mBehavior?.peekHeight = getPeekHeight()
+//            mBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
+//        }
     }
 
     private fun getPeekHeight(): Int {
