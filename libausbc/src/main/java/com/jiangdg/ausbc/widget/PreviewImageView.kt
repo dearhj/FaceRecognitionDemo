@@ -135,9 +135,9 @@ class PreviewImageView: AppCompatImageView {
     }
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-    override fun onDraw(canvas: Canvas?) {
+    override fun onDraw(canvas: Canvas) {
         try {
-            canvas?.saveLayer(mSrcRectF, null)
+            canvas.saveLayer(mSrcRectF, null)
             // 缩小画布
 //            val sx = 1.0f * (width - borderWidth) / width
 //            val sy  = 1.0f * (height - borderWidth) / height
@@ -155,15 +155,15 @@ class PreviewImageView: AppCompatImageView {
             mClipPath.reset()
             mClipPath.addRoundRect(mSrcRectF, mSrcRadii, Path.Direction.CCW)
             if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.O_MR1) {
-                canvas?.drawPath(mClipPath, mPaint)
+                canvas.drawPath(mClipPath, mPaint)
             } else {
                 mTmpPath.reset()
                 mTmpPath.addRect(mSrcRectF, Path.Direction.CCW)
                 mTmpPath.op(mClipPath, Path.Op.DIFFERENCE)
-                canvas?.drawPath(mTmpPath, mPaint)
+                canvas.drawPath(mTmpPath, mPaint)
             }
             mPaint.xfermode = null
-            canvas?.restore()
+            canvas.restore()
 
             // 绘制边框
             drawBorders(canvas)
@@ -270,20 +270,21 @@ class PreviewImageView: AppCompatImageView {
         val scaleX = PropertyValuesHolder.ofFloat("scaleX", 1.0f, 1.2f, 1.0f)
         val scaleY = PropertyValuesHolder.ofFloat("scaleY", 1.0f, 1.2f, 1.0f)
         val progress = PropertyValuesHolder.ofFloat("progress", getProgress(), 1.0f)
-        mBreathAnimation = ObjectAnimator.ofPropertyValuesHolder(this,  scaleX,  scaleY, progress).apply {
-            addListener(object :AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator?) {
-                    super.onAnimationEnd(animation)
-                    isNewImageLoading = false
-                    setProgress(0.0f)
-                    mBreathAnimation = null
-                    mListener?.onLoadingFinish()
-                }
-            })
-            duration = 150
-            interpolator = LinearInterpolator()
-            start()
-        }
+        mBreathAnimation = null
+//        mBreathAnimation = ObjectAnimator.ofPropertyValuesHolder(this,  scaleX,  scaleY, progress).apply {
+//            addListener(object :AnimatorListenerAdapter() {
+//                fun onAnimationEnd(animation: Animator?) {
+////                    super.onAnimationEnd(animation)
+////                    isNewImageLoading = false
+////                    setProgress(0.0f)
+////                    mBreathAnimation = null
+////                    mListener?.onLoadingFinish()
+//                }
+//            })
+//            duration = 150
+//            interpolator = LinearInterpolator()
+//            start()
+//        }
     }
 
     private fun isAnimationRunning() =  mProgressAnim?.isRunning ==true || mBreathAnimation?.isRunning == true

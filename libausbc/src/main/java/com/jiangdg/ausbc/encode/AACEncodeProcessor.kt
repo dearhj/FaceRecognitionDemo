@@ -26,7 +26,7 @@ import com.jiangdg.ausbc.encode.bean.RawData
 import com.jiangdg.ausbc.utils.Logger
 import com.jiangdg.ausbc.utils.MediaUtils
 import com.jiangdg.ausbc.utils.Utils
-import com.jiangdg.natives.LameMp3
+//import com.jiangdg.natives.LameMp3
 import java.io.File
 import java.io.FileOutputStream
 import java.nio.ByteBuffer
@@ -227,7 +227,7 @@ class AACEncodeProcessor(strategy: IAudioStrategy? = null) : AbstractProcessor(f
                 if (Utils.debugCamera) {
                     Logger.i(TAG, "start record mp3 success, $sampleRate, $channelCount, $audioPath")
                 }
-                LameMp3.lameInit(sampleRate, channelCount, sampleRate, BIT_RATE, DEGREE_RECORD_MP3)
+//                LameMp3.lameInit(sampleRate, channelCount, sampleRate, BIT_RATE, DEGREE_RECORD_MP3)
                 mMainHandler.post {
                     callBack.onBegin()
                 }
@@ -235,14 +235,16 @@ class AACEncodeProcessor(strategy: IAudioStrategy? = null) : AbstractProcessor(f
                 while (mRecordMp3State.get()) {
                     mRecordMp3Queue.poll()?.apply {
                         val tmpData = MediaUtils.transferByte2Short(data, size)
-                        val encodeSize = LameMp3.lameEncode(tmpData, null, tmpData.size, mp3Buf)
+//                        val encodeSize = LameMp3.lameEncode(tmpData, null, tmpData.size, mp3Buf)
+                        val encodeSize = 0
                         Logger.i(TAG, "encode, $size, $encodeSize")
                         if (encodeSize > 0) {
                             fos?.write(mp3Buf, 0, encodeSize)
                         }
                     }
                 }
-                val flushSize = LameMp3.lameFlush(mp3Buf)
+//                val flushSize = LameMp3.lameFlush(mp3Buf)
+                val flushSize = 0
                 if (flushSize > 0) {
                     fos.write(mp3Buf, 0, flushSize)
                 }
@@ -255,7 +257,7 @@ class AACEncodeProcessor(strategy: IAudioStrategy? = null) : AbstractProcessor(f
                 try {
                     fos?.close()
                     fos = null
-                    LameMp3.lameClose()
+//                    LameMp3.lameClose()
                     releaseAudioRecord()
                     mMainHandler.post {
                         callBack.onComplete(audioPath)

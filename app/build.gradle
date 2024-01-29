@@ -4,19 +4,15 @@ plugins {
 }
 
 android {
-    compileSdkVersion rootProject.ext.versionCompiler
+    compileSdk 34
+    namespace 'com.test.facerecognitionbyusbcamera'
+
     defaultConfig {
         applicationId "com.test.facerecognitionbyusbcamera"
-        minSdkVersion rootProject.ext.minSdkVersion
-        targetSdkVersion rootProject.ext.versionTarget
-        versionCode rootProject.ext.versionCode
-        versionName rootProject.ext.versionNameString
-
-        multiDexEnabled true
-
-        ndk{
-            abiFilters 'armeabi-v7a','arm64-v8a'
-        }
+        minSdk 26
+        targetSdk 34
+        versionCode 5
+        versionName "1.2.1"
     }
     buildTypes {
         release {
@@ -24,10 +20,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-
     compileOptions {
-        sourceCompatibility rootProject.ext.javaSourceCompatibility
-        targetCompatibility rootProject.ext.javaTargetCompatibility
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     kotlinOptions {
@@ -37,33 +32,25 @@ android {
     buildFeatures {
         viewBinding true
     }
-
-    // libuvc module should need set local.properties
-    // eg: ndk.dir=D\:\\Developer\\Environment\\AndroidSdks\\ndk\\21.0.6113669
-//    ndkVersion rootProject.ext.ndkVersion
+//    buildFeatures {buildConfig true}
 }
+
+//repositories {
+//    flatDir {
+//        dirs 'libs'
+//    }
+//}
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation "androidx.appcompat:appcompat:${androidXVersion}"
-    implementation "androidx.core:core-ktx:${kotlinCoreVersion}"
-    implementation "com.google.android.material:material:${materialVersion}"
-    implementation "androidx.constraintlayout:constraintlayout:${constraintlayoutVersion}"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:${kotlinCoroutines}"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
-    implementation "com.github.CymChad:BaseRecyclerViewAdapterHelper:$quick_version"
-    implementation "com.afollestad.material-dialogs:core:$dialog_version"
-
-    implementation "com.tencent.bugly:crashreport:$bugly_version"
-    implementation "com.tencent.bugly:nativecrashreport:$bugly_native_version"
-
-    api 'com.gyf.immersionbar:immersionbar:3.0.0'
-    implementation "com.github.bumptech.glide:glide:4.10.0"
-    implementation "com.github.bumptech.glide:okhttp3-integration:4.10.0"
-    implementation "com.zlc.glide:webpdecoder:1.6.4.9.0"
-    implementation 'com.tencent:mmkv:1.2.12'
+    implementation project(path: ':rockiva')
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation "androidx.core:core-ktx:1.12.0"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1"
+    implementation 'com.alibaba:fastjson:1.2.83'
+    implementation "com.afollestad.material-dialogs:core:3.2.1"
+    implementation 'com.google.android.material:material:1.11.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
     // For debug online
     implementation project(':libausbc')
@@ -71,3 +58,4 @@ dependencies {
     // demo
 //    implementation 'com.github.jiangdongguo.AndroidUSBCamera:libausbc:3.3.3'
 }
+

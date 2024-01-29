@@ -1,6 +1,42 @@
 <resources>
-    <string name="app_name" translatable="false">AUSBC3</string>
-    <string name="permission_tip" translatable="false">You have already denied permission access. Go to the Settings page to turn on permissions</string>
-    <string name="dialog_contact_title" translatable="false">Contact me:</string>
-    <string name="dialog_contact_message" translatable="false">765067602@qq.com\n\n❤ version: %s</string>
+    <string name="app_name">FaceRecByUsbCamera</string>
+    <string name="settings_no_camera">No camera is found</string>
+    <string name="permission_require">Permission required</string>
+    <string name="main_title">Rockchip IVA Face SDK</string>
+    <string name="face_recognition">Face recognition</string>
+    <string name="face_register">Face register</string>
+    <string name="file_go_root">Back to root..</string>
+    <string name="file_go_up">Back to parent directory</string>
+    <string name="face_manage">Face management</string>
+    <string name="face_manage_tip">Register,import,and face database management</string>
+    <string name="face_import">Face import</string>
+    <string name="face_import_title">Import photo to register, supporting jpg/png format.</string>
+    <string name="face_import_dir_select">Please select photo or directory to import:</string>
+    <string name="face_import_btn">Import</string>
+    <string name="face_import_continue">Continue to import</string>
+    <string name="import_pause">Pause import( %1$d/%2$d )</string>
+    <string name="import_stop">Stop importing</string>
+    <string name="select_dir_to_import">Please select the directory to import photos</string>
+    <string name="FLA_dataset_tips">Not selected</string>
+    <string name="select">Select</string>
+    <string name="file_not_exist">File not exist!</string>
+    <string name="take_photo">Take photo</string>
+    <string name="re_take_photo">Take photo again</string>
+    <string name="register">Register</string>
+    <string name="register_failed">Register failed</string>
+    <string name="face_db_manager">Face database management</string>
+    <string name="read_file_fail">read file fail</string>
+    <string name="author_model_init">Algorithm model is initializing,please wait...</string>
+    <string name="importing">Importing(%1$d/%2$d)</string>
+    <string name="import_failed">Import failed</string>
+    <string name="import_complete">Import completed(%1$d/%2$d)</string>
+    <string name="import_failed_file_list">Below files import failed：\n</string>
+    <string name="use_camera">Camera</string>
+    <string name="gallery">Gallery</string>
+    <string name="tips_take_photo">Please take a photo</string>
+    <string name="tips_enter_name">Please enter name</string>
+    <string name="tips_get_face_info">Please re-choose photo</string>
+    <string name="register_sucdess">Register success</string>
+    <string name="powered_by_rockchip">Powered by Rockchip GPADC.</string>
+    <string name="app_title">RockIVA Face Demo</string>
 </resources>

@@ -47,19 +47,19 @@ class TipView : AppCompatTextView {
 
     private fun init(context: Context?) {
         hideAnim.addListener(object : Animator.AnimatorListener {
-            override fun onAnimationRepeat(animation: Animator?) {
+            override fun onAnimationStart(p0: Animator) {
             }
 
-            override fun onAnimationEnd(animation: Animator?) {
+            override fun onAnimationEnd(p0: Animator) {
                 if (this@TipView.visibility == View.VISIBLE) {
                     this@TipView.visibility = View.GONE
                 }
             }
 
-            override fun onAnimationCancel(animation: Animator?) {
+            override fun onAnimationCancel(p0: Animator) {
             }
 
-            override fun onAnimationStart(animation: Animator?) {
+            override fun onAnimationRepeat(p0: Animator) {
             }
         })
     }

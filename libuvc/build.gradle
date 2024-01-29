@@ -1,28 +1,26 @@
-apply plugin: 'com.android.library'
-
-import org.apache.tools.ant.taskdefs.condition.Os
+plugins {
+    id 'com.android.library'
+}
 
 android {
-    compileSdkVersion rootProject.ext.versionCompiler
-    buildToolsVersion rootProject.ext.versionBuildTool
-
-    compileOptions {
-        sourceCompatibility rootProject.ext.javaSourceCompatibility
-        targetCompatibility rootProject.ext.javaTargetCompatibility
-    }
+    namespace 'com.jiangdg.uvccamera'
+    compileSdk 34
 
     defaultConfig {
-        minSdkVersion rootProject.ext.minSdkVersion
-        targetSdkVersion rootProject.ext.versionTarget
+        minSdk 24
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
+
+        ndk {
+            abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
+        }
     }
 
-    lintOptions {
-        checkReleaseBuilds false
-        // Or, if you prefer, you can continue to check for errors in release builds,
-        // but continue the build even when errors are found:
-        abortOnError false
-        // The demo app does not have translations.
-        disable 'MissingTranslation'
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     buildTypes {
@@ -31,45 +29,16 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
-}
 
-tasks.withType(JavaCompile) {
-    compileTask -> compileTask.dependsOn ndkBuild
-}
-
-String getNdkBuildPath() {
-    def ndkBuildingDir = System.getenv("NDK_HOME")
-    if (ndkBuildingDir==null || ndkBuildingDir.isEmpty()) {
-        Properties properties = new Properties()
-        properties.load(project.rootProject.file('local.properties').newDataInputStream())
-        ndkBuildingDir = properties.getProperty("ndk.dir")
+    sourceSets {
+        main {
+            jniLibs.srcDir 'src/main/jniLibs'
+        }
     }
-    def ndkBuildPath = ndkBuildingDir
-    if (Os.isFamily(Os.FAMILY_WINDOWS)) {
-        ndkBuildPath = ndkBuildingDir + '/ndk-build.cmd'
-    } else {
-        ndkBuildPath = ndkBuildingDir + '/ndk-build'
-    }
-    return ndkBuildPath
 }
-
-task ndkBuild(type: Exec, description: 'Compile JNI source via NDK') {
-    println('executing ndkBuild')
-    def ndkBuildPath = getNdkBuildPath();
-    commandLine ndkBuildPath, '-j8', '-C', file('src/main').absolutePath
-}
-
-task ndkClean(type: Exec, description: 'clean JNI libraries') {
-    println('executing ndkBuild clean')
-    def ndkBuildPath = getNdkBuildPath();
-    commandLine ndkBuildPath, 'clean', '-C', file('src/main').absolutePath
-}
-
-clean.dependsOn 'ndkClean'
 
 dependencies {
     implementation fileTree(dir: new File(buildDir, 'libs'), include: '*.jar')
-    implementation "androidx.appcompat:appcompat:${androidXVersion}"
+    implementation "androidx.appcompat:appcompat:1.6.1"
     implementation 'com.elvishew:xlog:1.11.0'
-//	implementation project(path: ':libuvccommon')
 }

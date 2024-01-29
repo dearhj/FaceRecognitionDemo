@@ -21,7 +21,7 @@ import android.media.MediaFormat
 import android.view.Surface
 import com.jiangdg.ausbc.callback.IEncodeDataCallBack
 import com.jiangdg.ausbc.utils.Logger
-import com.jiangdg.natives.YUVUtils
+//import com.jiangdg.natives.YUVUtils
 import java.lang.Exception
 import java.nio.ByteBuffer
 
@@ -108,13 +108,13 @@ class H264EncodeProcessor(
             null
         } else {
             data.apply {
-                if (size != width * height * 3 /2) {
-                    return null
-                }
-                if (isPortrait) {
-                    YUVUtils.nativeRotateNV21(data,width, height, 90)
-                }
-                YUVUtils.nv21ToYuv420sp(data, width, height)
+//                if (size != width * height * 3 /2) {
+//                    return null
+//                }
+//                if (isPortrait) {
+//                    YUVUtils.nativeRotateNV21(data,width, height, 90)
+//                }
+//                YUVUtils.nv21ToYuv420sp(data, width, height)
             }
         }
     }

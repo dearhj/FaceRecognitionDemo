@@ -174,48 +174,35 @@ abstract class CameraFragment : BaseFragment(), ICameraStateCallBack {
 
     private fun handleTextureView(textureView: TextureView) {
         textureView.surfaceTextureListener = object : TextureView.SurfaceTextureListener {
-            override fun onSurfaceTextureAvailable(
-                surface: SurfaceTexture?,
-                width: Int,
-                height: Int
-            ) {
+            override fun onSurfaceTextureAvailable(p0: SurfaceTexture, width: Int, height: Int) {
                 registerMultiCamera()
             }
 
-            override fun onSurfaceTextureSizeChanged(
-                surface: SurfaceTexture?,
-                width: Int,
-                height: Int
-            ) {
+            override fun onSurfaceTextureSizeChanged(p0: SurfaceTexture, width: Int, height: Int) {
                 surfaceSizeChanged(width, height)
             }
 
-            override fun onSurfaceTextureDestroyed(surface: SurfaceTexture?): Boolean {
+            override fun onSurfaceTextureDestroyed(p0: SurfaceTexture): Boolean {
                 unRegisterMultiCamera()
                 return false
             }
 
-            override fun onSurfaceTextureUpdated(surface: SurfaceTexture?) {
+            override fun onSurfaceTextureUpdated(p0: SurfaceTexture) {
             }
         }
     }
 
     private fun handleSurfaceView(surfaceView: SurfaceView) {
         surfaceView.holder.addCallback(object : SurfaceHolder.Callback {
-            override fun surfaceCreated(holder: SurfaceHolder?) {
+            override fun surfaceCreated(p0: SurfaceHolder) {
                 registerMultiCamera()
             }
 
-            override fun surfaceChanged(
-                holder: SurfaceHolder?,
-                format: Int,
-                width: Int,
-                height: Int
-            ) {
+            override fun surfaceChanged(p0: SurfaceHolder, format: Int, width: Int, height: Int) {
                 surfaceSizeChanged(width, height)
             }
 
-            override fun surfaceDestroyed(holder: SurfaceHolder?) {
+            override fun surfaceDestroyed(p0: SurfaceHolder) {
                 unRegisterMultiCamera()
             }
         })

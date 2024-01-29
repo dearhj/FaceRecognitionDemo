@@ -4,15 +4,14 @@ plugins {
 }
 
 android {
-    compileSdkVersion rootProject.ext.versionCompiler
+    namespace 'com.jiangdg.ausbc'
+    compileSdk 34
 
     defaultConfig {
-        minSdkVersion rootProject.ext.minSdkVersion
-        targetSdkVersion rootProject.ext.versionTarget
-        versionCode rootProject.ext.versionCode
-        versionName rootProject.ext.versionNameString
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        minSdk 24
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
         consumerProguardFiles "consumer-rules.pro"
     }
 
@@ -30,21 +29,12 @@ android {
         jvmTarget = '1.8'
     }
 }
-repositories {
-    flatDir {
-        dirs 'libs'
-    }
-}
 
 dependencies {
-//    implementation project(':libnative')
-    compile fileTree(dir: 'libs', include: ['*.aar'])
-    implementation "androidx.appcompat:appcompat:${androidXVersion}"
-    implementation "androidx.constraintlayout:constraintlayout:${constraintlayoutVersion}"
-    implementation "com.google.android.material:material:${materialVersion}"
+    implementation "androidx.appcompat:appcompat:1.6.1"
+    implementation "androidx.constraintlayout:constraintlayout:2.1.4"
+    implementation "com.google.android.material:material:1.11.0"
     api 'com.elvishew:xlog:1.11.0'
-//    implementation fileTree("libs")
 
     implementation project(path: ':libuvc')
-//    api project(path: ':libnative')
 }

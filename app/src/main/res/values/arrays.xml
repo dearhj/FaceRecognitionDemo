@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="scene" >
+        <item>签到场景</item>
+        <item>跟踪场景</item>
+    </string-array>
+</resources>

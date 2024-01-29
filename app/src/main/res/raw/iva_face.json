@@ -1,0 +1,55 @@
+{
+    "modelPath": "/sdcard/Android/data/iva/rockiva_data",
+    "licensePath": "/sdcard/Android/data/iva/key.lic",
+    "workMode": 0,
+    "coreMask": 0,
+    "channelId": 0,
+    "imageInfo": {
+        "width": 1920,
+        "height": 1080,
+        "format": 0,
+        "transformMode": 0
+    },
+    "detModel": 3,
+    "face": {
+        "mode": 0,
+        "faceTaskType": {
+            "faceCaptureEnable": 0,
+            "faceRecognizeEnable": 1,
+            "faceAttributeEnable": 0,
+            "relatedPersonEnable": 0
+        },
+        "faceCaptureRule": {
+            "sensitivity": 0,
+            "detectAreaEn": 0,
+            "qualityFilterMode": 0,
+            "qualityConfig": {
+                "minScore": 60,
+                "minSize": 30
+            },
+            "faceCapacity": {
+                "maxCaptureNum": 10
+            },
+            "captureImageConfig": {
+                "mode": 1,
+                "resizeMode": 1,
+                "alignWidth": 16,
+                "expand": {
+                    "up": 1.0,
+                    "down": 1.0,
+                    "left": 1.0,
+                    "right": 1.0
+                },
+                "imageInfo": {
+                    "width": 240,
+                    "height": 320,
+                    "format": 1
+                }
+            },
+            "optType": 1,
+            "faceQualityThrehold": 50,
+            "optBestOverTime": 10000,
+            "captureWithMask": 0
+        }
+    }
+}
