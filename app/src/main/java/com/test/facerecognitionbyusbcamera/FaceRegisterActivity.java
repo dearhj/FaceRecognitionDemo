@@ -46,6 +46,7 @@ public class FaceRegisterActivity extends AppCompatActivity {
 
     private static final int REQUEST_CODE_TAKE_PHOTO = 2;
     private static final int REQUEST_CODE_PICK_IMAGE = 3;
+    private static final int REQUEST_CODE_TAKE_PHOTO_BY_USB = 4;
     private Uri imageUri;
 
     private Handler mMainHandler;
@@ -92,21 +93,21 @@ public class FaceRegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 new AlertDialog.Builder(FaceRegisterActivity.this)
-                    .setTitle(R.string.take_photo)
-                    .setItems(new String[]{getString(R.string.use_camera), getString(R.string.gallery)}, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            if (i == 0) {
-                                takePhoto();
-                            } else {
-                                Intent intent = new Intent(FaceRegisterActivity.this, RegisterByUsbCamera.class);
-                                startActivity(intent);
+                        .setTitle(R.string.take_photo)
+                        .setItems(new String[]{getString(R.string.use_camera), getString(R.string.gallery)}, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                if (i == 0) {
+                                    takePhoto();
+                                } else {
+                                    Intent intent = new Intent(FaceRegisterActivity.this, RegisterByUsbCamera.class);
+                                    startActivityForResult(intent, REQUEST_CODE_TAKE_PHOTO_BY_USB);
 //                                choosePhoto();
+                                }
                             }
-                        }
-                    })
-                    .create()
-                    .show();
+                        })
+                        .create()
+                        .show();
             }
         });
         final EditText nameEditText = findViewById(R.id.name_editText);
@@ -148,10 +149,10 @@ public class FaceRegisterActivity extends AppCompatActivity {
     RockIvaCallback mIvaCallback = new RockIvaCallback() {
         @Override
         public void onResultCallback(String result, int execureState) {
-            Log.d(Configs.TAG, ""+result);
+            Log.d(Configs.TAG, "" + result);
             JSONObject jobj = JSONObject.parseObject(result);
             if (JSONPath.contains(jobj, "$.faceCapResults")) {
-                int num = (int)JSONPath.eval(jobj, "$.faceCapResults.num");
+                int num = (int) JSONPath.eval(jobj, "$.faceCapResults.num");
                 for (int i = 0; i < num; i++) {
                     JSONObject faceCapResultObj = (JSONObject) JSONPath.eval(jobj, String.format("$.faceCapResults.faceResults[%d]", i));
                     final int qualityResult = (int) JSONPath.eval(faceCapResultObj, "$.qualityResult");
@@ -184,7 +185,7 @@ public class FaceRegisterActivity extends AppCompatActivity {
 
     void takePhoto() {
         File file = new File(mRegisterImagePath);
-        if(!file.exists()) {
+        if (!file.exists()) {
             file.mkdirs();
         }
         File output = new File(file, System.currentTimeMillis() + ".jpg");
@@ -212,6 +213,14 @@ public class FaceRegisterActivity extends AppCompatActivity {
     public void onActivityResult(int req, int res, Intent data) {
         super.onActivityResult(req, res, data);
         switch (req) {
+            case REQUEST_CODE_TAKE_PHOTO_BY_USB:
+                try {
+                    File image = new File(MyApplication.savePath);
+                    Uri usbImageUri = Uri.fromFile(image);
+                    detectFace(usbImageUri, 0);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             case REQUEST_CODE_TAKE_PHOTO:
                 if (res == RESULT_OK) {
                     try {
@@ -259,7 +268,7 @@ public class FaceRegisterActivity extends AppCompatActivity {
         }
         Matrix matrix = new Matrix();
         matrix.postRotate(rotate);
-        bit = Bitmap.createBitmap(bit , 0, 0, bit.getWidth(), bit.getHeight(), matrix, true);
+        bit = Bitmap.createBitmap(bit, 0, 0, bit.getWidth(), bit.getHeight(), matrix, true);
         mRegisterImageBitmap = bit;
 
         int bytes = bit.getByteCount();
@@ -294,7 +303,7 @@ public class FaceRegisterActivity extends AppCompatActivity {
         opt.inJustDecodeBounds = true;
         InputStream is = null;
         is = getContentResolver().openInputStream(imageUri);
-        BitmapFactory.decodeStream(is,null, opt);
+        BitmapFactory.decodeStream(is, null, opt);
         opt.inPurgeable = true;
         opt.inInputShareable = true;
         opt.inJustDecodeBounds = false;
@@ -304,7 +313,7 @@ public class FaceRegisterActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         is = getContentResolver().openInputStream(imageUri);
-        Bitmap bitmap = BitmapFactory.decodeStream(is,null, opt);
+        Bitmap bitmap = BitmapFactory.decodeStream(is, null, opt);
         try {
             is.close();
         } catch (IOException e) {

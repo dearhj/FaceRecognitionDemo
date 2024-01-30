@@ -1,6 +1,9 @@
 package com.test.facerecognitionbyusbcamera
 
 import android.annotation.SuppressLint
+import android.graphics.ImageFormat
+import android.graphics.Rect
+import android.graphics.YuvImage
 import android.hardware.usb.UsbDevice
 import android.os.Build
 import android.view.Gravity
@@ -8,19 +11,25 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupWindow
+import androidx.fragment.app.FragmentActivity
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.list.listItemsSingleChoice
 import com.jiangdg.ausbc.MultiCameraClient
 import com.jiangdg.ausbc.base.CameraFragment
 import com.jiangdg.ausbc.callback.ICameraStateCallBack
-import com.jiangdg.ausbc.callback.ICaptureCallBack
 import com.jiangdg.ausbc.callback.IPreviewDataCallBack
 import com.jiangdg.ausbc.camera.CameraUVC
 import com.jiangdg.ausbc.camera.bean.CameraRequest
 import com.jiangdg.ausbc.render.env.RotateType
 import com.jiangdg.ausbc.utils.*
 import com.jiangdg.ausbc.widget.*
+import com.test.facerecognitionbyusbcamera.MyApplication.Companion.takePhotoFlag
 import com.test.facerecognitionbyusbcamera.databinding.FragmentRegisterBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
+import java.io.File
+import java.io.FileOutputStream
 import java.util.*
 
 class RegisterFragment : CameraFragment(), View.OnClickListener {
@@ -29,9 +38,30 @@ class RegisterFragment : CameraFragment(), View.OnClickListener {
     private lateinit var mViewBinding: FragmentRegisterBinding
     private lateinit var callBack: IPreviewDataCallBack
 
+    companion object {
+        var mActivity: FragmentActivity? = null
+        fun takePicture(data: ByteArray?) {
+            val pictureFile = File(MyApplication.savePath)
+            println("执行了这里，开始保存图片资源，，，   ${pictureFile.path} ")
+            try {
+                val image = YuvImage(data, ImageFormat.NV21, 1920, 1080, null)
+                val fos = FileOutputStream(pictureFile)
+                image.compressToJpeg(Rect(0, 0, 1920, 1080), 90, fos)
+                fos.write(data)
+                fos.close()
+                takePhotoFlag = false
+                MainScope().launch(Dispatchers.Main) { mActivity?.onBackPressed() }
+            } catch (ex: Exception) {
+                ex.printStackTrace()
+            }
+        }
+    }
+
     override fun initView() {
         super.initView()
         callBack = Callback()
+        takePhotoFlag = false
+        mActivity = activity
         mViewBinding.resolutionBtn.setOnClickListener(this)
         mViewBinding.changeBtn.setOnClickListener(this)
         mViewBinding.picBtn.setOnClickListener(this)
@@ -63,17 +93,17 @@ class RegisterFragment : CameraFragment(), View.OnClickListener {
         addPreviewDataCallBack(callBack)
     }
 
-    class Callback: IPreviewDataCallBack {
+    class Callback : IPreviewDataCallBack {
         override fun onPreviewData(
             data: ByteArray?,
             width: Int,
             height: Int,
             format: IPreviewDataCallBack.DataFormat
         ) {
-            println("预览数据流  ${data?.size}    $width   $height  $format")
+            println("预览数据流  ${data?.size}    $takePhotoFlag   $width   $height  $format")
+            if (takePhotoFlag) takePicture(data)
         }
     }
-
 
 
     override fun getCameraView(): IAspectRatio {
@@ -109,6 +139,7 @@ class RegisterFragment : CameraFragment(), View.OnClickListener {
             mViewBinding.resolutionBtn -> {
                 showResolutionDialog()
             }
+
             mViewBinding.changeBtn -> {
                 getCurrentCamera()?.let { strategy ->
                     if (strategy is CameraUVC) {
@@ -117,28 +148,22 @@ class RegisterFragment : CameraFragment(), View.OnClickListener {
                     }
                 }
             }
+
             mViewBinding.picBtn -> {
-                captureImage(object : ICaptureCallBack{
-                    override fun onBegin() {
-                        println("开始拍照  ")
-                    }
-
-                    override fun onComplete(path: String?) {
-                        println("拍照完成     $path")
-                    }
-
-                    override fun onError(error: String?) {
-                        println("拍照失败。。。   $error")
-                    }
-                })
+                takePhotoFlag = true
+                println("执行了这里，准备拍摄图片。。。。。   ")
             }
+
             else -> {
             }
         }
     }
 
     @SuppressLint("CheckResult")
-    private fun showUsbDevicesDialog(usbDeviceList: MutableList<UsbDevice>?, curDevice: UsbDevice?) {
+    private fun showUsbDevicesDialog(
+        usbDeviceList: MutableList<UsbDevice>?,
+        curDevice: UsbDevice?
+    ) {
         if (usbDeviceList.isNullOrEmpty()) {
             ToastUtils.show("Get usb device failed")
             return
@@ -147,16 +172,18 @@ class RegisterFragment : CameraFragment(), View.OnClickListener {
         var selectedIndex: Int = -1
         for (index in (0 until usbDeviceList.size)) {
             val dev = usbDeviceList[index]
-            val devName = if (Build.VERSION.SDK_INT >=Build.VERSION_CODES.LOLLIPOP && !dev.productName.isNullOrEmpty()) {
-                "${dev.productName}(${curDevice?.deviceId})"
-            } else {
-                dev.deviceName
-            }
-            val curDevName = if (Build.VERSION.SDK_INT >=Build.VERSION_CODES.LOLLIPOP && !curDevice?.productName.isNullOrEmpty()) {
-                "${curDevice!!.productName}(${curDevice.deviceId})"
-            } else {
-                curDevice?.deviceName
-            }
+            val devName =
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !dev.productName.isNullOrEmpty()) {
+                    "${dev.productName}(${curDevice?.deviceId})"
+                } else {
+                    dev.deviceName
+                }
+            val curDevName =
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !curDevice?.productName.isNullOrEmpty()) {
+                    "${curDevice!!.productName}(${curDevice.deviceId})"
+                } else {
+                    curDevice?.deviceName
+                }
             if (devName == curDevName) {
                 selectedIndex = index
             }
