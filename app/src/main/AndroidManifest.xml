@@ -22,7 +22,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppFullScreenTheme">
         <activity
-            android:name=".RegisterByUsbCamera"
+            android:name=".StartFragmentTool"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

@@ -100,7 +100,8 @@ public class FaceRegisterActivity extends AppCompatActivity {
                                 if (i == 0) {
                                     takePhoto();
                                 } else {
-                                    Intent intent = new Intent(FaceRegisterActivity.this, RegisterByUsbCamera.class);
+                                    Intent intent = new Intent(FaceRegisterActivity.this, StartFragmentTool.class);
+                                    intent.putExtra("flag", "register");
                                     startActivityForResult(intent, REQUEST_CODE_TAKE_PHOTO_BY_USB);
 //                                choosePhoto();
                                 }

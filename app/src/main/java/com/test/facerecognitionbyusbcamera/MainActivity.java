@@ -75,7 +75,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Intent intent = null;
 
         if (id == R.id.button_face_recognition) {
-            intent = new Intent(getApplicationContext(), FaceRecognitionActivity.class);
+//            intent = new Intent(getApplicationContext(), FaceRecognitionActivity.class);
+            intent = new Intent(getApplicationContext(), StartFragmentTool.class);
+            intent.putExtra("flag", "recognition");
         } else if (id == R.id.button_face_register) {
             intent = new Intent(getApplicationContext(), FaceManagerMainActivity.class);
         }

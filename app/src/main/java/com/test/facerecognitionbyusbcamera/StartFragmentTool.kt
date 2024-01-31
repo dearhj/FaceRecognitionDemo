@@ -6,17 +6,23 @@ import androidx.fragment.app.Fragment
 import com.test.facerecognitionbyusbcamera.databinding.ActivityRegisterByUsbCameraBinding
 import java.io.File
 
-class RegisterByUsbCamera : AppCompatActivity() {
+class StartFragmentTool : AppCompatActivity() {
     private lateinit var viewBinding: ActivityRegisterByUsbCameraBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewBinding = ActivityRegisterByUsbCameraBinding.inflate(layoutInflater)
-        MyApplication.savePath = applicationContext.externalCacheDir.toString() + "/iva/" + System.currentTimeMillis() + ".jpg"
-        val file = File(MyApplication.savePath)
-        if(file.exists()) file.delete()
-        file.createNewFile()
         setContentView(viewBinding.root)
-        replaceDemoFragment(RegisterFragment())
+        val extras = intent.extras
+        if (extras?.getString("flag").equals("register")) {
+            val fileIva = File(applicationContext.externalCacheDir.toString() + "/iva/")
+            if (!fileIva.exists()) fileIva.mkdir()
+            MyApplication.savePath =
+                applicationContext.externalCacheDir.toString() + "/iva/" + System.currentTimeMillis() + ".jpg"
+            val file = File(MyApplication.savePath)
+            if (file.exists()) file.delete()
+            file.createNewFile()
+            replaceDemoFragment(RegisterFragment())
+        } else replaceDemoFragment(RecognitionFragment())
     }
 
     @Deprecated("Deprecated in Java")
