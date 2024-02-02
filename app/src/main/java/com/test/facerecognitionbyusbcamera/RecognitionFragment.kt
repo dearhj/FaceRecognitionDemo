@@ -10,6 +10,8 @@ import android.graphics.PorterDuff
 import android.graphics.PorterDuffXfermode
 import android.graphics.Typeface
 import android.hardware.usb.UsbDevice
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.util.SparseArray
 import android.view.Gravity
@@ -39,7 +41,6 @@ import com.rockchip.iva.RockIvaImage.TransformMode
 import com.rockchip.iva.face.RockIvaFaceFeature
 import com.rockchip.iva.face.RockIvaFaceInfo
 import com.rockchip.iva.face.RockIvaFaceLibrary
-import com.test.facerecognitionbyusbcamera.MyApplication.Companion.takePhotoFlag
 import com.test.facerecognitionbyusbcamera.databinding.FragmentRecognitionBinding
 import com.test.facerecognitionbyusbcamera.utils.ImageBufferQueue
 import kotlinx.coroutines.Dispatchers
@@ -76,7 +77,6 @@ class RecognitionFragment : CameraFragment(), View.OnClickListener {
         super.initView()
         mActivity = activity
         callBack = Callback()
-//        mViewBinding.resolutionBtn.setOnClickListener(this)
         mViewBinding.changeBtn.setOnClickListener(this)
 
         //初始化库
@@ -182,6 +182,17 @@ class RecognitionFragment : CameraFragment(), View.OnClickListener {
     }
 
 
+    val handler = Handler(Looper.getMainLooper())
+    val runnableRed = Runnable { setRed() }
+    val runnableGreen = Runnable { setGreen() }
+    val runnableOff = Runnable { setOff() }
+    val runnableBeep = Runnable { setBeep() }
+    val runnableBeepOff = Runnable { setBeepOff() }
+    var canLightRed = true
+    var canLightOff = true
+    var canLightGreen = true
+    var hasFaceVerified = false
+    var listFaceOfCheckSuccess = mutableListOf<Int>()
     private var mIvaCallback: RockIvaCallback = object : RockIvaCallback {
         override fun onResultCallback(result: String, execureState: Int) {
             Log.d(Configs.TAG, "$result  execureState =  $execureState")
@@ -189,14 +200,50 @@ class RecognitionFragment : CameraFragment(), View.OnClickListener {
             val faceList = ArrayList<RockIvaFaceInfo>()
             if (JSONPath.contains(jobj, "$.faceDetResult")) {
                 val num = JSONPath.eval(jobj, "$.faceDetResult.objNum") as Int
+                println("MHJZ    这里识别到人脸了吗？？？？  $num ")
+                if (num == 0) listFaceOfCheckSuccess.clear()
+                hasFaceVerified = false
                 for (i in 0 until num) {
                     val faceInfoJobj =
                         JSONPath.eval(jobj, String.format("$.faceDetResult.faceInfo[%d]", i))
+                    val faceInfoId = JSONPath.eval(faceInfoJobj, "$.objId") as Int
+                    println("")
+                    if (listFaceOfCheckSuccess.size != 0) {
+                        if (listFaceOfCheckSuccess.contains(faceInfoId)) hasFaceVerified = true
+                    }
+                    println("MHJZ   是否有人脸通过认证？ $hasFaceVerified   通过认证的数量？   ${if (listFaceOfCheckSuccess.size != 0) listFaceOfCheckSuccess.size else 0}")
                     val faceInfo = JSONObject.parseObject(
                         faceInfoJobj.toString(),
                         RockIvaFaceInfo::class.java
                     )
                     faceList.add(faceInfo)
+                }
+                //当检测到人脸且没有人脸通过识别，亮红灯
+                if (num != 0 && !hasFaceVerified && canLightRed) {
+                    canLightRed = false
+                    canLightOff = true
+                    canLightGreen = true
+                    handler.removeCallbacks(runnableGreen)
+                    handler.removeCallbacks(runnableOff)
+                    handler.postDelayed(runnableRed, 300)
+                }
+                //当检测到人脸且其中有人脸通过识别，亮绿灯
+                if (hasFaceVerified && canLightGreen) {
+                    canLightGreen = false
+                    canLightOff = true
+                    canLightRed = true
+                    handler.removeCallbacks(runnableRed)
+                    handler.removeCallbacks(runnableOff)
+                    handler.postDelayed(runnableGreen, 300)
+                }
+                //当没有检测到人脸时，熄灯
+                if (num == 0 && canLightOff) {
+                    canLightOff = false
+                    canLightRed = true
+                    canLightGreen = true
+                    handler.removeCallbacks(runnableRed)
+                    handler.removeCallbacks(runnableGreen)
+                    handler.postDelayed(runnableOff, 300)
                 }
                 updateCurFaceList(faceList)
                 checkFaceRecognition()
@@ -217,9 +264,12 @@ class RecognitionFragment : CameraFragment(), View.OnClickListener {
                         if (searchResults != null) {
                             val id = JSONPath.eval(faceCapResultObj, "$.faceInfo.objId") as Int
                             for (searchResult in searchResults) {
-                                println("找到人脸信息，，，，   ${searchResult.faceId}    ${searchResult.score}")
+                                println("MHJZ  执行这里了吗？？？？？找到人脸信息，，，，   ${searchResult.faceId}    ${searchResult.score}")
                             }
                             if (searchResults.size > 0 && searchResults[0].score > Configs.IVA_FACE_RECOG_SCORE_THRESHOLD) {
+
+                                listFaceOfCheckSuccess.add(id)
+
                                 val trackedFace = mTrackedFaceArray!![id]
                                 trackedFace?.setName(
                                     searchResults[0].faceId,
@@ -403,9 +453,8 @@ class RecognitionFragment : CameraFragment(), View.OnClickListener {
                     RockIva.convertRectRatioToPixel(width, height, face.faceInfo.faceRect, mode)
                 mTrackResultCanvas?.drawRect(drawRect, mTrackResultPaint!!)
                 var drawStr = ""
-                drawStr += "id:" + face.faceInfo.objId
                 if (face.name != null && face.name.isNotEmpty()) {
-                    drawStr += "  " + String.format("名字:%s  相似度:%.2f", face.name, face.score)
+                    drawStr += String.format("姓名:%s", face.name)
                 }
                 mTrackResultCanvas!!.drawText(
                     drawStr, drawRect.left.toFloat(),

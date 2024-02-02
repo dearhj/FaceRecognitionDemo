@@ -14,7 +14,22 @@ android {
         versionCode 5
         versionName "1.2.1"
     }
+
+    signingConfigs {
+        sign {
+            //T50 T195 Q66 Q865M_Q115M_android11 Q86  Q86M Q81 NewPublic
+            storeFile file("D:\\Android12SignerGUI\\SignFiles\\NewPublic\\platform.jks")
+            storePassword('android')
+            keyAlias('android')
+            keyPassword('android')
+        }
+    }
     buildTypes {
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.sign
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
