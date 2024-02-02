@@ -89,61 +89,45 @@ public class FaceRegisterActivity extends AppCompatActivity {
 
     void initView() {
         mRegFaceImageView = findViewById(R.id.reg_face_imageView);
-        mRegFaceImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new AlertDialog.Builder(FaceRegisterActivity.this)
-                        .setTitle(R.string.take_photo)
-                        .setItems(new String[]{getString(R.string.use_camera), getString(R.string.gallery)}, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                if (i == 0) {
-                                    takePhoto();
-                                } else {
-                                    Intent intent = new Intent(FaceRegisterActivity.this, StartFragmentTool.class);
-                                    intent.putExtra("flag", "register");
-                                    startActivityForResult(intent, REQUEST_CODE_TAKE_PHOTO_BY_USB);
+        mRegFaceImageView.setOnClickListener(v -> new AlertDialog.Builder(FaceRegisterActivity.this)
+                .setTitle(R.string.take_photo)
+                .setItems(new String[]{getString(R.string.use_camera), getString(R.string.use_usb_camera)}, (dialogInterface, i) -> {
+                    if (i == 0) {
+                        takePhoto();
+                    } else {
+                        Intent intent = new Intent(FaceRegisterActivity.this, StartFragmentTool.class);
+                        intent.putExtra("flag", "register");
+                        startActivityForResult(intent, REQUEST_CODE_TAKE_PHOTO_BY_USB);
 //                                choosePhoto();
-                                }
-                            }
-                        })
-                        .create()
-                        .show();
-            }
-        });
+                    }
+                })
+                .create()
+                .show());
         final EditText nameEditText = findViewById(R.id.name_editText);
-        nameEditText.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                    mName = nameEditText.getText().toString();
-                    Log.d(Configs.TAG, "name=" + mName);
-                    return true;
-                }
-                return false;
-            }
-        });
+
         Button mRegisterButton = findViewById(R.id.register_button);
-        mRegisterButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mFaceInfo == null) {
-                    Toast.makeText(getApplicationContext(), R.string.tips_take_photo, Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if (mName == null || mName.isEmpty()) {
-                    Toast.makeText(getApplicationContext(), R.string.tips_enter_name, Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if (mFaceFeature == null || mFaceFeature.data == null) {
-                    Toast.makeText(getApplicationContext(), R.string.tips_get_face_info, Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                RockIvaFaceLibrary.FaceRecord faceRecord = new RockIvaFaceLibrary.FaceRecord(mName, mFaceFeature);
-                ivaFaceLibrary.addFace(faceRecord);
-                Toast.makeText(getApplicationContext(), R.string.register_sucdess, Toast.LENGTH_LONG).show();
-                FaceRegisterActivity.this.finish();
+        mRegisterButton.setOnClickListener(v -> {
+            mName = nameEditText.getText().toString();
+            if (mFaceInfo == null) {
+                Toast.makeText(getApplicationContext(), R.string.tips_take_photo, Toast.LENGTH_SHORT).show();
+                return;
             }
+            if (mName.isEmpty()) {
+                Toast.makeText(getApplicationContext(), R.string.tips_enter_name, Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (mName.trim().length() == 0){
+                Toast.makeText(getApplicationContext(), R.string.tips_enter_name_fail, Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (mFaceFeature == null || mFaceFeature.data == null) {
+                Toast.makeText(getApplicationContext(), R.string.tips_get_face_info, Toast.LENGTH_SHORT).show();
+                return;
+            }
+            RockIvaFaceLibrary.FaceRecord faceRecord = new RockIvaFaceLibrary.FaceRecord(mName, mFaceFeature);
+            ivaFaceLibrary.addFace(faceRecord);
+            Toast.makeText(getApplicationContext(), R.string.register_sucdess, Toast.LENGTH_LONG).show();
+            FaceRegisterActivity.this.finish();
         });
     }
 

@@ -29,7 +29,7 @@
     <ImageView
         android:id="@+id/changeBtn"
         style="@style/Camera2TopButtonStyle"
-        android:src="@mipmap/camera_resolution"
+        android:src="@mipmap/change_camera"
         app:layout_constraintBottom_toBottomOf="@+id/toolbarBg"
         app:layout_constraintStart_toStartOf="@id/toolbarBg"
         app:layout_constraintTop_toTopOf="@id/toolbarBg" />
@@ -39,7 +39,7 @@
     <ImageView
         android:id="@+id/resolutionBtn"
         style="@style/Camera2TopButtonStyle"
-        android:src="@mipmap/camera_resolution"
+        android:src="@mipmap/resolution"
         app:layout_constraintBottom_toBottomOf="@+id/toolbarBg"
         app:layout_constraintEnd_toEndOf="@id/toolbarBg"
         app:layout_constraintTop_toTopOf="@id/toolbarBg" />
@@ -47,7 +47,7 @@
     <ImageView
         android:id="@+id/picBtn"
         style="@style/Camera2TopButtonStyle"
-        android:src="@mipmap/camera_resolution"
+        android:src="@mipmap/take_photo"
         android:paddingBottom="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

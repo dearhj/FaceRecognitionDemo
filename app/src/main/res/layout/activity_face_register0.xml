@@ -13,8 +13,6 @@
         android:layout_width="400dp"
         android:layout_height="400dp"
         android:layout_weight="3"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
         app:srcCompat="@drawable/ic_add_a_photo_black_96dp" />
 
     <EditText

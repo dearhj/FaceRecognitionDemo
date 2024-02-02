@@ -1,14 +1,16 @@
 <resources>
-    <string name="app_name">FaceRecByUsbCamera</string>
+    <string name="app_name">FaceRecognitionDemo</string>
     <string name="settings_no_camera">No camera is found</string>
     <string name="permission_require">Permission required</string>
-    <string name="main_title">Rockchip IVA Face SDK</string>
+    <string name="main_title1">Rockchip IVA Face SDK</string>
+    <string name="main_title">Facial Recognition Demonstration Demo</string>
     <string name="face_recognition">Face recognition</string>
     <string name="face_register">Face register</string>
     <string name="file_go_root">Back to root..</string>
     <string name="file_go_up">Back to parent directory</string>
     <string name="face_manage">Face management</string>
-    <string name="face_manage_tip">Register,import,and face database management</string>
+    <string name="face_manage_tip1">Register,import,and face database management</string>
+    <string name="face_manage_tip">Registering facial information</string>
     <string name="face_import">Face import</string>
     <string name="face_import_title">Import photo to register, supporting jpg/png format.</string>
     <string name="face_import_dir_select">Please select photo or directory to import:</string>
@@ -31,10 +33,12 @@
     <string name="import_failed">Import failed</string>
     <string name="import_complete">Import completed(%1$d/%2$d)</string>
     <string name="import_failed_file_list">Below files import failed：\n</string>
-    <string name="use_camera">Camera</string>
+    <string name="use_camera">Using the system camera</string>
+    <string name="use_usb_camera">Using the USB camera</string>
     <string name="gallery">Gallery</string>
     <string name="tips_take_photo">Please take a photo</string>
     <string name="tips_enter_name">Please enter name</string>
+    <string name="tips_enter_name_fail">The name is illegal</string>
     <string name="tips_get_face_info">Please re-choose photo</string>
     <string name="register_sucdess">Register success</string>
     <string name="powered_by_rockchip">Powered by Rockchip GPADC.</string>

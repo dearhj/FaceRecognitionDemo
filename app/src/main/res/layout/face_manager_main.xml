@@ -43,6 +43,7 @@
 
         <Button
             android:id="@+id/button_start_face_import"
+            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="60dp"
