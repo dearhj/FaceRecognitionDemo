@@ -172,6 +172,16 @@ abstract class CameraFragment : BaseFragment(), ICameraStateCallBack {
 
     protected fun getDeviceList() = mCameraClient?.getDeviceList()
 
+    protected fun getDeviceListOnlyCamera(): MutableList<UsbDevice> {
+        val list = mutableListOf<UsbDevice>()
+        getDeviceList()?.forEach {
+            if(it.productId != 29987 || it.vendorId != 6790) {
+                list.add(it)
+            }
+        }
+        return list
+    }
+
     private fun handleTextureView(textureView: TextureView) {
         textureView.surfaceTextureListener = object : TextureView.SurfaceTextureListener {
             override fun onSurfaceTextureAvailable(p0: SurfaceTexture, width: Int, height: Int) {

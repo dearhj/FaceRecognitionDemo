@@ -143,7 +143,7 @@ class RegisterFragment : CameraFragment(), View.OnClickListener {
             mViewBinding.changeBtn -> {
                 getCurrentCamera()?.let { strategy ->
                     if (strategy is CameraUVC) {
-                        showUsbDevicesDialog(getDeviceList(), strategy.getUsbDevice())
+                        showUsbDevicesDialog(getDeviceListOnlyCamera(), strategy.getUsbDevice())
                         return
                     }
                 }
