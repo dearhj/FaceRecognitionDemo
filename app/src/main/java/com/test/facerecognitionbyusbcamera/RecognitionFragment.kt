@@ -95,6 +95,7 @@ class RecognitionFragment : CameraFragment(), View.OnClickListener {
         bufferQueue = null
         rockIva = null
         ivaFaceLibrary = null
+        handler.post(runnableOff)
     }
 
     override fun onCameraState(
