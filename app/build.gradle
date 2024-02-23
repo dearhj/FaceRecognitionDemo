@@ -72,6 +72,7 @@ dependencies {
     implementation project(':libausbc')
 
     implementation project(':lkread')
+    implementation project(':dkread')
 
     // demo
 //    implementation 'com.github.jiangdongguo.AndroidUSBCamera:libausbc:3.3.3'

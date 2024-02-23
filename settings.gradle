@@ -23,3 +23,5 @@ include ':libausbc'
 include ':libuvc'
 
 include ':lkread'
+include ':dkread'
+include ':usbNfc'
