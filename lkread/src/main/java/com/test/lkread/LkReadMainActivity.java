@@ -122,18 +122,15 @@ public class LkReadMainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_test_main);
 
-        m_btn = (Button) findViewById(R.id.button1);
-        m_btn_autoTest = (Button)findViewById(R.id.btn_autoTest);
-        m_btn_clean = (Button)findViewById(R.id.btn_clean);
-        m_text = (EditText)findViewById(R.id.editText1);
-        m_text_devPath = (EditText)findViewById(R.id.edt_devPath);
-        m_text_baud = (EditText)findViewById(R.id.edt_baud);
-        grp_serialType = (RadioGroup)findViewById(R.id.radioGroup_serialType);
-        grp_cardType_contactLess = (RadioGroup)findViewById(R.id.radioGroup_cardTypeContactLess);
-        grp_cardType_contact = (RadioGroup)findViewById(R.id.radioGroup_cardTypeContact);
-        grp_cardType_composite = (RadioGroup)findViewById(R.id.radioGroup_cardTypeComposite);
-        grp_compositeCard_interface = (RadioGroup)findViewById(R.id.radioGroup_cardTypeComposite_interface);
-        layout = (RelativeLayout) findViewById(R.id.relativeLayout);
+        m_btn = findViewById(R.id.button1);
+        m_btn_autoTest = findViewById(R.id.btn_autoTest);
+        m_btn_clean = findViewById(R.id.btn_clean);
+        m_text = findViewById(R.id.editText1);
+        grp_cardType_contactLess = findViewById(R.id.radioGroup_cardTypeContactLess);
+        grp_cardType_contact = findViewById(R.id.radioGroup_cardTypeContact);
+        grp_cardType_composite = findViewById(R.id.radioGroup_cardTypeComposite);
+        grp_compositeCard_interface = findViewById(R.id.radioGroup_cardTypeComposite_interface);
+        layout = findViewById(R.id.relativeLayout);
         m_dynamicTV = new TextView(this);
         layoutPara = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         layout.addView(m_dynamicTV);
@@ -141,8 +138,6 @@ public class LkReadMainActivity extends AppCompatActivity {
         call_comPro = new comproCall();
         call_fm1208 = new FM1208();
         mHandler = new LocalHandler(this);
-
-        UpdateUIForPortType(false);
 
         m_btn.setOnClickListener(arg0 -> {
             DoOneTest();
@@ -169,21 +164,6 @@ public class LkReadMainActivity extends AppCompatActivity {
             ClearMsg();
         });
 
-        grp_serialType.setOnCheckedChangeListener((arg0, arg1) -> {
-            int radioButtonId = arg0.getCheckedRadioButtonId();
-
-            if(radioButtonId == R.id.radioSerail)
-            {
-                struct_portType = PT_SERIAL;
-                UpdateUIForPortType(true);
-            }
-            else if(radioButtonId == R.id.radioUSB)
-            {
-                struct_portType = PT_USB;
-                UpdateUIForPortType(false);
-            }
-
-        });
 
 
         grp_cardType_contactLess.setOnCheckedChangeListener((group, checkedId) -> {
@@ -363,49 +343,24 @@ public class LkReadMainActivity extends AppCompatActivity {
         }
     }
 
-    public void  UpdateUIForPortType(boolean benable)
-    {
-        m_text_devPath.setFocusable(benable);
-        m_text_baud.setFocusable(benable);
-        m_text_devPath.setEnabled(benable);
-        m_text_baud.setEnabled(benable);
-        m_text_devPath.setFocusableInTouchMode(benable);
-        m_text_baud.setFocusableInTouchMode(benable);
-
-    }
-
     private void SendUIMessage(char toWhat, String text) {
-        runOnUiThread(() -> {
-            switch(toWhat) {
-                case UI_UPDATE_MSG_TEXT_APPEND:
-                    gl_msg += text+"\n";
-                    break;
-                case UI_UPDATE_MSG_TEXT_SET:
-                    gl_msg = text+"\n";
-                    break;
-                case UI_UPDATE_BTN_AUTO:
-                    m_btn_autoTest.setText(text);
-                    break;
-            }
-            m_text.setText(gl_msg);
-        });
-//        switch(toWhat)
-//        {
-//            case UI_UPDATE_MSG_TEXT_APPEND:
-//                gl_msg += text+"\n";
-//                break;
-//            case UI_UPDATE_MSG_TEXT_SET:
-//                gl_msg = text+"\n";
-//                break;
-//            case UI_UPDATE_BTN_AUTO:
-//                gl_autoBtnText = text;
-//                break;
-//        }
-//
-//        Message msg = mHandler.obtainMessage();
-//        msg.what = toWhat;
-//        msg.obj = gl_msg;
-//        mHandler.sendMessage(msg);
+        switch(toWhat)
+        {
+            case UI_UPDATE_MSG_TEXT_APPEND:
+                gl_msg += text+"\n";
+                break;
+            case UI_UPDATE_MSG_TEXT_SET:
+                gl_msg = text+"\n";
+                break;
+            case UI_UPDATE_BTN_AUTO:
+                gl_autoBtnText = text;
+                break;
+        }
+
+        Message msg = mHandler.obtainMessage();
+        msg.what = toWhat;
+        msg.obj = gl_msg;
+        mHandler.sendMessage(msg);
 
     }
 
@@ -423,8 +378,8 @@ public class LkReadMainActivity extends AppCompatActivity {
 
         ClearMsg();
 
-        devPath = m_text_devPath.getText().toString();
-        baud = Integer.parseInt(m_text_baud.getText().toString());
+        devPath = "";
+        baud = 0;
 
         if(struct_deviceType == DEV_RF)
         {
@@ -748,7 +703,7 @@ public class LkReadMainActivity extends AppCompatActivity {
 
                     call_comPro.hex_asc(pSnrM1, pByteStr, snrSize[0]);
                     for(i=0;i<2*snrSize[0];i++)pCharHex[i] =(char) pByteStr[i];
-                    SendUIMessage(UI_UPDATE_MSG_TEXT_APPEND,String.valueOf(pCharHex));
+                    SendUIMessage(UI_UPDATE_MSG_TEXT_APPEND, "id为：" + String.valueOf(pCharHex));
                     //卡片验证
                     // authen
                     result = call_comPro.lc_authentication(hdev, keymode, tSec , defKey);
@@ -906,7 +861,7 @@ public class LkReadMainActivity extends AppCompatActivity {
                     call_comPro.hex_asc( pSnrM1, pCharSingle,snrSize[0]);
                     for(i=0;i<2*snrSize[0]; i++)pCharHex[i] = (char)pCharSingle[i];
 
-                    SendUIMessage(UI_UPDATE_MSG_TEXT_APPEND,String.valueOf(pCharHex));
+                    SendUIMessage(UI_UPDATE_MSG_TEXT_APPEND, "id为：" + String.valueOf(pCharHex));
 
                     // read page 0
                     result = call_comPro.lc_read_NTag(hdev,(byte) 0, pCharSingle );

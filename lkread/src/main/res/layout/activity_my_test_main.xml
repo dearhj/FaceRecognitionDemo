@@ -11,54 +11,9 @@
 			android:id="@+id/relativeLayout"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
+			android:padding="30dp"
             android:orientation="horizontal" >
-    		
-    		<RadioGroup android:id="@+id/radioGroup_serialType" android:contentDescription="Port Type" android:layout_width="wrap_content" android:layout_height="wrap_content" >
-     		<RadioButton  android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/radioSerail" android:text="SerialPort" android:checked="false"></RadioButton>
-     		<RadioButton  android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/radioUSB" android:text="USB" android:checked="true"></RadioButton>    
-    		</RadioGroup>
-    		
-    		<TextView
-        		android:id="@+id/tv_devPath"
-        		android:layout_width="wrap_content"
-        		android:layout_height="wrap_content"
-        		android:layout_below="@+id/radioGroup_serialType"
-        		android:layout_marginTop="10dp"
-        		android:text="Device Path:" />
-    		
-    		<EditText
-        		android:id="@+id/edt_devPath"
-        		android:layout_width="wrap_content"
-        		android:layout_height="wrap_content"
-        		android:layout_alignBaseline="@+id/tv_devPath"
-        		android:layout_below="@+id/radioGroup_serialType"
-        		android:layout_marginTop="20dp"
-        		android:layout_toRightOf="@+id/tv_devPath"
-        		android:singleLine="true"
-        		android:text="@string/DefPath"
-        		android:enabled= "false" />
-    		
-    		<TextView
-        		android:id="@+id/tv_baud"
-        		android:layout_below="@+id/tv_devPath"
-        		android:layout_width="wrap_content"
-        		android:layout_height="wrap_content"
-        		android:layout_marginTop="10dp"
-        		android:layout_marginRight="10dp"
-        		android:text= "Baud:"
-        		/>
-    		<EditText
-        		android:id="@+id/edt_baud"
-        		android:layout_width="wrap_content"
-        		android:layout_height="wrap_content"
-        		android:layout_below="@+id/tv_devPath"
-        		android:layout_toRightOf="@+id/tv_baud"
-        		android:layout_alignLeft="@+id/edt_devPath"
-        		android:layout_alignBaseline="@+id/tv_baud"
-        		android:singleLine="true"
-        		android:layout_marginTop="10dp"
-        		android:text="@string/DefBaud"
-        		android:enabled="false" />
+
 
     		
     		<RadioGroup android:id="@+id/radioGroup_cardTypeContactLess" android:contentDescription="Card Type(ContactLess)" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@+id/edt_baud" android:orientation="horizontal" >
@@ -85,8 +40,8 @@
 				<RadioButton  android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/radio_card_pbocPAN" android:text="PBOC" android:layout_below="@id/radio_card_pbocPAN"></RadioButton>
 			</RadioGroup>
 			<RadioGroup android:id="@+id/radioGroup_cardTypeComposite_interface" android:contentDescription="CompositeCard_Interface" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@+id/radioGroup_cardTypeContact" android:layout_toRightOf="@+id/radioGroup_cardTypeComposite" android:orientation="horizontal" >
-				<RadioButton  android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/radio_interface_contact" android:text="Contact" android:layout_below="@id/radio_card_SSC" android:checked="true"></RadioButton>
-				<RadioButton  android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/radio_interface_contactless" android:text="Contactless" android:layout_below="@id/radio_card_SSC"></RadioButton>
+				<RadioButton  android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/radio_interface_contact" android:text="接触(仅读取SSC卡时生效)" android:layout_below="@id/radio_card_SSC" android:checked="true"></RadioButton>
+				<RadioButton  android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/radio_interface_contactless" android:text="非接触式(仅读取SSC卡时生效)" android:layout_below="@id/radio_card_SSC"></RadioButton>
 			</RadioGroup>
     		<Button
         		android:id="@+id/button1"
@@ -95,7 +50,7 @@
         		android:layout_alignParentLeft="true"
         		android:layout_below="@+id/radioGroup_cardTypeComposite"
         		android:layout_marginTop="10dp"
-        		android:text="Test" />
+        		android:text="单次读卡测试" />
     		
     		<Button
         		android:id="@+id/btn_autoTest"
@@ -104,7 +59,8 @@
         		android:layout_toRightOf="@+id/button1"
         		android:layout_below="@+id/radioGroup_cardTypeComposite"
         		android:layout_marginTop="10dp"
-        		android:text="AutoTest" />
+        		android:text="连续读卡测试" />
+
     		
     		<Button
         		android:id="@+id/btn_clean"
@@ -113,7 +69,7 @@
         		android:layout_below="@+id/radioGroup_cardTypeComposite"
         		android:layout_toRightOf="@+id/btn_autoTest"
         		android:layout_marginTop="10dp"
-        		android:text="Clean" />
+        		android:text="清空" />
     		
     		<EditText
         		android:id="@+id/editText1"
