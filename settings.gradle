@@ -22,3 +22,4 @@ include ':rockiva'
 include ':libausbc'
 include ':libuvc'
 
+include ':lkread'

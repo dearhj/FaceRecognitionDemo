@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">lkread</string>
+    <string name="hello_world">Click button to test!</string>
+    <string name="menu_settings">Settings</string>
+    <string name="DefPath">/dev/ttyS3</string>
+    <string name="DefBaud">115200</string>
+    <string name="DefPID">41234</string>
+    <string name="DefVID">1137</string>
+</resources>

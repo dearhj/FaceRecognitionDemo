@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="20dp"
+    tools:context=".ItemChoose">
+    <TextView
+        android:id="@+id/face_camera"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:text="Face Recognition"
+        tools:ignore="MissingConstraints" />
+    <TextView
+        android:id="@+id/dk_read"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@+id/face_camera"
+        android:text="dk_read"
+        tools:ignore="MissingConstraints" />
+    <TextView
+        android:id="@+id/lk_read"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@+id/dk_read"
+        android:text="lk_read"
+        tools:ignore="MissingConstraints" />
+    <TextView
+        android:id="@+id/led_test"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@+id/lk_read"
+        android:text="led_test"
+        tools:ignore="MissingConstraints" />
+    <TextView
+        android:id="@+id/zw_test"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@+id/led_test"
+        android:text="Fingerprint Identification"
+        tools:ignore="MissingConstraints" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,12 +7,12 @@
     <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
-    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
-    <uses-feature android:name="android.hardware.camera"/>
-    <uses-feature android:name="android.hardware.camera.autofocus"/>
-    <uses-feature android:name="android.hardware.usb.host"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+    <uses-feature android:name="android.hardware.usb.host" />
 
     <application
         android:name=".MyApplication"
@@ -24,17 +24,21 @@
         android:supportsRtl="true"
         android:theme="@style/AppFullScreenTheme">
         <activity
+            android:name=".ItemChoose"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".StartFragmentTool"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
             android:screenOrientation="landscape">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".FaceRecognitionActivity"
@@ -54,11 +58,13 @@
         <activity
             android:name=".filemanager.FileManagerActivity"
             android:screenOrientation="sensorLandscape" />
-        <receiver android:name=".AlarmLightDeviceReceiver"
+
+        <receiver
+            android:name=".AlarmLightDeviceReceiver"
             android:exported="true">
             <intent-filter>
-                <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"/>
-                <action android:name="android.hardware.usb.action.USB_DEVICE_DETACHED"/>
+                <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
+                <action android:name="android.hardware.usb.action.USB_DEVICE_DETACHED" />
             </intent-filter>
         </receiver>
     </application>

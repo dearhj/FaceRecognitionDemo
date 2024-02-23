@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">FaceRecognitionDemo</string>
+    <string name="app_name">D10RDemo</string>
     <string name="settings_no_camera">No camera is found</string>
     <string name="permission_require">Permission required</string>
     <string name="main_title1">Rockchip IVA Face SDK</string>
