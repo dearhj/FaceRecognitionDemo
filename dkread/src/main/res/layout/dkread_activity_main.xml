@@ -52,6 +52,17 @@
         android:text="关自动寻卡" />
 
     <Button
+        android:id="@+id/closeLog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginBottom="-1dp"
+        android:layout_toEndOf="@+id/openAutoSearchCard"
+        android:layout_toStartOf="@+id/closeAutoSearchCard"
+        android:text="关闭日志输出" />
+
+    <Button
         android:id="@+id/openAutoSearchCard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

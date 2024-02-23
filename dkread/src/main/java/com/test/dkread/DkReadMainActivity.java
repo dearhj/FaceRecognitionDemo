@@ -138,21 +138,21 @@ public class DkReadMainActivity extends Activity {
         public void onReceiveLogI(String tag, String msg) {
             super.onReceiveLogI(tag, msg);
             Log.i(tag, msg);
-            logViewln("[I] " + msg);
+            if (!flagLog) logViewln("[日志输出->I] " + msg);
         }
 
         @Override
         public void onReceiveLogD(String tag, String msg) {
             super.onReceiveLogD(tag, msg);
             Log.d(tag, msg);
-            logViewln("[D] " + msg);
+            if (!flagLog) logViewln("[日志输出->D] " + msg);
         }
 
         @Override
         public void onReceiveLogE(String tag, String msg) {
             super.onReceiveLogE(tag, msg);
             Log.e(tag, msg);
-            logViewln("[E] " + msg);
+            if (!flagLog) logViewln("[日志输出->E] " + msg);
         }
     };
 
@@ -409,10 +409,13 @@ public class DkReadMainActivity extends Activity {
                     System.out.println("USBDK  寻到Ultralight卡 ->UID:" + ntag21x.uidToString());
                     logViewln("寻到Ultralight卡 ->UID:" + ntag21x.uidToString());
                     try {
+                        logViewln("准备进行写入文本： hello world!");
                         boolean flag = ntag21x.NdefTextWrite("hello world!");
-                        System.out.println("USBDK  这里写的结果是？ " + flag);
+                        if (flag) logViewln("文本写入成功！");
+                        else logViewln("文本写入失败！");
+                        logViewln("准备读取文本");
                         String read = ntag21x.NdefTextRead();
-                        System.out.println("USBDK    这里读取到的结果是》   " + read);
+                        logViewln("读取到的内容： " + read);
                     } catch (CardNoResponseException e) {
                         System.out.println("USBDK,   写或读崩溃了。");
                         e.printStackTrace();
@@ -595,8 +598,11 @@ public class DkReadMainActivity extends Activity {
         });
     }
 
+    private static boolean flagLog = false;
+
     //UI初始化
     private void initUI() {
+        flagLog = false;
         msgBuffer = new StringBuffer();
 
         msgText = (EditText)findViewById(R.id.msgText);
@@ -604,6 +610,7 @@ public class DkReadMainActivity extends Activity {
         Button openAutoSearchCard = (Button)findViewById(R.id.openAutoSearchCard);
         Button closeAutoSearchCard = (Button)findViewById(R.id.closeAutoSearchCard);
         Button otaButton = (Button)findViewById(R.id.ota_button);
+        Button closeButton = (Button)findViewById(R.id.closeLog);
         delayTextView = findViewById(R.id.delayTextView);
 
         msgText.setKeyListener(null);
@@ -622,6 +629,16 @@ public class DkReadMainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 logViewln(null);
+            }
+        });
+
+        closeButton.setOnClickListener(view -> {
+            if(flagLog) {
+                flagLog = false;
+                closeButton.setText("关闭日志输出");
+            } else {
+                flagLog = true;
+                closeButton.setText("打开日志输出");
             }
         });
 

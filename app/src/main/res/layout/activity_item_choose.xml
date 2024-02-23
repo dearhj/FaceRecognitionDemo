@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:gravity="center"
-        android:text="Face Recognition"
+        android:text="人脸识别摄像头以及三色报警灯模块"
         tools:ignore="MissingConstraints" />
     <TextView
         android:id="@+id/dk_read"
@@ -19,7 +19,7 @@
         android:layout_height="50dp"
         android:gravity="center"
         app:layout_constraintTop_toBottomOf="@+id/face_camera"
-        android:text="dk_read"
+        android:text="德科读卡器模块"
         tools:ignore="MissingConstraints" />
     <TextView
         android:id="@+id/lk_read"
@@ -27,7 +27,7 @@
         android:layout_height="50dp"
         android:gravity="center"
         app:layout_constraintTop_toBottomOf="@+id/dk_read"
-        android:text="lk_read"
+        android:text="莱卡读卡器模块"
         tools:ignore="MissingConstraints" />
     <TextView
         android:id="@+id/led_test"
@@ -35,7 +35,7 @@
         android:layout_height="50dp"
         android:gravity="center"
         app:layout_constraintTop_toBottomOf="@+id/lk_read"
-        android:text="led_test"
+        android:text="LED灯模块"
         tools:ignore="MissingConstraints" />
     <TextView
         android:id="@+id/zw_test"
@@ -43,7 +43,14 @@
         android:layout_height="50dp"
         android:gravity="center"
         app:layout_constraintTop_toBottomOf="@+id/led_test"
-        android:text="Fingerprint Identification"
+        android:text="指纹模块"
         tools:ignore="MissingConstraints" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="100dp"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@+id/zw_test"
+        android:text="D10R各模块测试程序\n点击各模块即可进入对应的测试界面" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
