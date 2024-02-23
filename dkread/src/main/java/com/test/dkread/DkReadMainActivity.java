@@ -63,7 +63,6 @@ public class DkReadMainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dkread_activity_main);
-        System.out.println("执行了这里，打开了这个页面。");
         //UI初始化
         initUI();
 
@@ -851,5 +850,6 @@ public class DkReadMainActivity extends Activity {
 
         //销毁
         usbNfcDevice.destroy();
+        usbNfcDevice = null;
     }
 }
