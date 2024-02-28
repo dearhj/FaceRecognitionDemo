@@ -48,9 +48,18 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="100dp"
+        android:paddingTop="50dp"
         android:gravity="center"
         app:layout_constraintTop_toBottomOf="@+id/zw_test"
         android:text="D10R各模块测试程序\n点击各模块即可进入对应的测试界面" />
+
+    <TextView
+        android:id="@+id/version"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:ignore="MissingConstraints,SmallSp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

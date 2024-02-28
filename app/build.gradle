@@ -11,8 +11,9 @@ android {
         applicationId "com.test.facerecognitionbyusbcamera"
         minSdk 26
         targetSdk 34
-        versionCode 5
-        versionName "1.2.1"
+        versionCode 1
+        versionName "1.0.0"
+        buildConfigField "long", "BUILD_TIME", System.currentTimeMillis() + "L"
     }
 
     signingConfigs {
@@ -46,6 +47,7 @@ android {
     }
 
     buildFeatures {
+        buildConfig true
         viewBinding true
     }
 //    buildFeatures {buildConfig true}
