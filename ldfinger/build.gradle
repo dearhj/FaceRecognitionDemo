@@ -1,0 +1,41 @@
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+    id 'com.google.devtools.ksp'
+}
+
+android {
+    compileSdk 34
+    namespace 'com.zaz.demo'
+
+    defaultConfig {
+        minSdk 26
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_19
+        targetCompatibility JavaVersion.VERSION_19
+    }
+
+
+}
+
+dependencies {
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation "androidx.room:room-paging:2.6.1"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0"
+    implementation "androidx.room:room-runtime:2.6.1"
+    implementation 'com.google.android.material:material:1.11.0'
+    ksp "androidx.room:room-compiler:2.6.1"
+    debugImplementation "com.guolindev.glance:glance:1.1.0"
+    implementation "com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.7"
+}
