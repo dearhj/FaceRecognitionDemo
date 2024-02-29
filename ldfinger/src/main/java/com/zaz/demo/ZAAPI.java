@@ -51,7 +51,7 @@ public class ZAAPI {
 	public final int MODEL_BUFFER = 0x03;
 
 	private String TAG = "ZAZAPI";
-	private   int isonline = 0;
+	public static int isonline = 0;
 	private int isbus = 0;
 
 	private ZAandroid a6 = new ZAandroid();

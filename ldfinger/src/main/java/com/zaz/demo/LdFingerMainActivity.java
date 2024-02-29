@@ -376,6 +376,12 @@ public class LdFingerMainActivity extends AppCompatActivity {
 
     boolean openFlag = false;
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ZAAPI.isonline = 0;
+    }
+
     //打开设备
     private void OpenDev() {
 
