@@ -1,4 +1,4 @@
-package com.za.finger;
+package com.zaz.demo;
 
 import android.annotation.SuppressLint;
 import android.app.PendingIntent;
@@ -11,6 +11,8 @@ import android.hardware.usb.UsbDeviceConnection;
 import android.hardware.usb.UsbInterface;
 import android.hardware.usb.UsbManager;
 import android.util.Log;
+
+import com.za.finger.ZAandroid;
 
 import java.io.DataOutputStream;
 import java.io.File;

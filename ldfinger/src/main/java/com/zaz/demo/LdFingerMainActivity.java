@@ -27,7 +27,6 @@ import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import com.za.finger.ZAAPI;
 import com.zaz.demo.db.FingerData;
 import com.zaz.demo.db.FingerDataBase;
 import com.zaz.demo.db.FingerDataDao;
