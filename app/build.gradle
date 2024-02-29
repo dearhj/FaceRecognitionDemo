@@ -77,7 +77,7 @@ dependencies {
     implementation project(':dkread')
     implementation project(':ledTest')
     implementation project(':ldfinger')
-
+//    implementation project(':zazfinger')
     // demo
 //    implementation 'com.github.jiangdongguo.AndroidUSBCamera:libausbc:3.3.3'
 }

@@ -1,6 +1,8 @@
 package com.test.facerecognitionbyusbcamera
 
+//import com.zaz060.demo.ZazFingerMainActivity
 import android.annotation.SuppressLint
+import android.content.ComponentName
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -51,7 +53,14 @@ class ItemChoose : AppCompatActivity(), View.OnClickListener {
             R.id.dk_read -> intent = Intent(applicationContext, DkReadMainActivity::class.java)
             R.id.lk_read -> intent = Intent(applicationContext, LkReadMainActivity::class.java)
             R.id.led_test -> intent = Intent(applicationContext, LedTestMainActivity::class.java)
-            R.id.zw_test_060 -> intent = Intent(applicationContext, MainActivity::class.java)
+            R.id.zw_test_060 -> {
+                intent = Intent()
+                intent.setAction(Intent.ACTION_MAIN)
+                intent.addCategory(Intent.CATEGORY_LAUNCHER)
+                val componentName = ComponentName("com.zaz060.demo", "com.zaz060.demo.MainActivity")
+                intent.setComponent(componentName)
+            }
+//            R.id.zw_test_060 -> intent = Intent(applicationContext, ZazFingerMainActivity::class.java)
             R.id.zw_test_8800 -> intent = Intent(applicationContext, LdFingerMainActivity::class.java)
         }
         startActivity(intent)
