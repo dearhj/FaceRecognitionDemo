@@ -49,7 +49,7 @@ class ItemChoose : AppCompatActivity(), View.OnClickListener {
     override fun onClick(p0: View?) {
         var intent: Intent? = null
         when (p0?.id) {
-            R.id.face_camera -> intent = Intent(applicationContext, MainActivity::class.java)
+            R.id.face_camera -> intent = Intent(applicationContext, ManageActivity::class.java)
             R.id.dk_read -> intent = Intent(applicationContext, DkReadMainActivity::class.java)
             R.id.lk_read -> intent = Intent(applicationContext, LkReadMainActivity::class.java)
             R.id.led_test -> intent = Intent(applicationContext, LedTestMainActivity::class.java)

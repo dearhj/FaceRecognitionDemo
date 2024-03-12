@@ -18,7 +18,6 @@ dependencyResolutionManagement {
 }
 
 include ':app'
-include ':rockiva'
 include ':libausbc'
 include ':libuvc'
 

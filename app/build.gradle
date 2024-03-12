@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'com.google.devtools.ksp'
 }
 
 android {
@@ -12,7 +13,7 @@ android {
         minSdk 26
         targetSdk 34
         versionCode 1
-        versionName "1.0.0"
+        versionName "1.0.1"
         buildConfigField "long", "BUILD_TIME", System.currentTimeMillis() + "L"
     }
 
@@ -50,35 +51,57 @@ android {
         buildConfig true
         viewBinding true
     }
-//    buildFeatures {buildConfig true}
-}
 
-//repositories {
-//    flatDir {
-//        dirs 'libs'
-//    }
-//}
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/maven/org.java-websocket/Java-WebSocket/pom.xml'
+    }
+    lintOptions {
+        abortOnError false
+    }
+}
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation project(path: ':rockiva')
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation "androidx.core:core-ktx:1.12.0"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1"
-    implementation 'com.alibaba:fastjson:1.2.83'
-    implementation "com.afollestad.material-dialogs:core:3.2.1"
     implementation 'com.google.android.material:material:1.11.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
-    // For debug online
+    // For debug online(uvc库)
     implementation project(':libausbc')
+    // demo(uvc库)
+//    implementation 'com.github.jiangdongguo.AndroidUSBCamera:libausbc:3.3.3'
 
+    //莱卡读卡器
     implementation project(':lkread')
+    //德科读卡器
     implementation project(':dkread')
+    //led测试
     implementation project(':ledTest')
+    //指纹模块
     implementation project(':ldfinger')
 //    implementation project(':zazfinger')
-    // demo
-//    implementation 'com.github.jiangdongguo.AndroidUSBCamera:libausbc:3.3.3'
+
+    //旷世人脸识别
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(dir: 'libs', include: ['*.aar'])
+    //算法授权  高版本sdk需要系统签名才能获取授权文件
+    implementation('org.apache.httpcomponents:httpmime:4.5.6') {
+        exclude module: "httpclient"
+    }
+    implementation 'com.android.volley:volley:1.2.1'
+    implementation 'org.apache.httpcomponents:httpcore:4.4.16'
+    //存储人脸信息数据库
+    implementation "androidx.room:room-paging:2.6.1"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0"
+    implementation "androidx.room:room-runtime:2.6.1"
+    ksp "androidx.room:room-compiler:2.6.1"
+    implementation "com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.7"
 }
 

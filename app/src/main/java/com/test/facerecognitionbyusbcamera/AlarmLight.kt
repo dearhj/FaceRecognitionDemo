@@ -18,14 +18,27 @@ private lateinit var usbEndpointOut: UsbEndpoint
 var flag = false
 var hasAlarmDevice = false
 
-fun initAlarmLight() {
-    manager = MyApplication.mContext.getSystemService(Context.USB_SERVICE) as UsbManager
+fun String.hexToByteArray(): ByteArray {
+    var hex = replace(" ", "")
+    if (hex.length % 2 != 0) hex = "0${hex}"
+    val result = ByteArray(hex.length / 2)
+    for (i in result.indices) {
+        val index = i * 2
+        val hexByte = hex.substring(index, index + 2)
+        result[i] = hexByte.toInt(16).toByte()
+    }
+    return result
+}
+
+fun initAlarmLight(context: Context) {
+    manager = context.getSystemService(Context.USB_SERVICE) as UsbManager
     device = getUsbDevices()
     device?.let { flag = openPort(it) }
 }
 
 fun setRed() {
-    val cmd = "CMD=1;PM=6+FF0000+FF0000+FF0000+FF0000+FF0000+FF0000".toByteArray()
+    val cmd = "FF040101AA".hexToByteArray()
+//    val cmd = "CMD=1;PM=6+FF0000+FF0000+FF0000+FF0000+FF0000+FF0000".toByteArray()
     checkDevice()
     if (flag) usbConnection.bulkTransfer(usbEndpointOut, cmd, cmd.size, 500)
 }
@@ -43,13 +56,15 @@ fun setBeepOff() {
 }
 
 fun setGreen() {
-    val cmd = "CMD=1;PM=6+00FF00+00FF00+00FF00+00FF00+00FF00+00FF00".toByteArray()
+    val cmd = "FF020101AA".hexToByteArray()
+//    val cmd = "CMD=1;PM=6+00FF00+00FF00+00FF00+00FF00+00FF00+00FF00".toByteArray()
     checkDevice()
     if (flag) usbConnection.bulkTransfer(usbEndpointOut, cmd, cmd.size, 500)
 }
 
 fun setOff() {
-    val cmd = "CMD=0".toByteArray()
+//    val cmd = "CMD=0".toByteArray()
+    val cmd = "FF010101AA".hexToByteArray()
     checkDevice()
     if (flag) usbConnection.bulkTransfer(usbEndpointOut, cmd, cmd.size, 500)
 }
@@ -66,7 +81,6 @@ private fun checkDevice() {
 fun getUsbDevices(): UsbDevice? {
     val deviceList = manager.deviceList
     deviceList.forEach {
-        println("TEST 这里的ID分别是》》》》   ${it.value.productId}    ${it.value.vendorId}     ${it.key}   ${it.value.deviceName}")
         if (it.value.productId == 29987 && it.value.vendorId == 6790) {
             hasAlarmDevice = true
             return deviceList[it.value.deviceName]

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.test.facerecognitionbyusbcamera"
     android:sharedUserId="android.uid.system">
 
@@ -14,8 +15,14 @@
     <uses-feature android:name="android.hardware.camera.autofocus" />
     <uses-feature android:name="android.hardware.usb.host" />
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission
+        android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.requestLegacyExternalStorage=true" />
+
     <application
-        android:name=".MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -25,6 +32,7 @@
         android:theme="@style/AppFullScreenTheme">
         <activity
             android:name=".ItemChoose"
+            android:screenOrientation="landscape"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -33,32 +41,22 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".StartFragmentTool"
-            android:exported="false" />
-        <activity
-            android:name=".MainActivity"
+            android:name=".ManageActivity"
             android:exported="true"
             android:screenOrientation="landscape">
         </activity>
         <activity
-            android:name=".FaceRecognitionActivity"
-            android:screenOrientation="sensorLandscape" />
+            android:name=".RecognitionActivity"
+            android:screenOrientation="landscape"
+            android:exported="false" />
         <activity
-            android:name=".FaceRegisterActivity"
-            android:screenOrientation="sensorLandscape" />
+            android:name=".ManageFaceInfo"
+            android:screenOrientation="landscape"
+            android:exported="false" />
         <activity
-            android:name=".TakePhotoActivity"
-            android:screenOrientation="sensorLandscape" />
-        <activity
-            android:name=".BatchRegisterActivity"
-            android:screenOrientation="sensorLandscape" />
-        <activity
-            android:name=".FaceManagerMainActivity"
-            android:screenOrientation="sensorLandscape" />
-        <activity
-            android:name=".filemanager.FileManagerActivity"
-            android:screenOrientation="sensorLandscape" />
-
+            android:name=".FaceManageActivity"
+            android:screenOrientation="landscape"
+            android:exported="false" />
         <receiver
             android:name=".AlarmLightDeviceReceiver"
             android:exported="true">

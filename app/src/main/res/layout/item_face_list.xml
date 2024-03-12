@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_vertical"
+    android:layout_marginTop="10dp"
+    android:padding="10dp"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_toStartOf="@+id/face_photo"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/face_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:lines="1"
+            android:textSize="25sp"
+            tools:text="name" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/face_photo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_gravity="center"
+        android:layout_marginEnd="20dp"
+        android:layout_toStartOf="@+id/updateFaceName"
+        android:textSize="25sp"
+        android:text="查看"/>
+
+    <TextView
+        android:id="@+id/updateFaceName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_gravity="center"
+        android:layout_marginEnd="20dp"
+        android:layout_toStartOf="@+id/delFaceName"
+        android:textSize="25sp"
+        android:text="更新"/>
+
+    <TextView
+        android:id="@+id/delFaceName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_gravity="center"
+        android:layout_marginEnd="10dp"
+        android:textSize="25sp"
+        android:text="删除"/>
+</RelativeLayout>
