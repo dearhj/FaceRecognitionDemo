@@ -95,7 +95,11 @@ public class ManageActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        mFacePassHandler.release();
+        try {
+            if (mFacePassHandler != null) mFacePassHandler.release();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /* 判断程序是否有所需权限 android22以上需要自申请权限 */
