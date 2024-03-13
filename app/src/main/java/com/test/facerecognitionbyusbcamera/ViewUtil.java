@@ -65,12 +65,12 @@ public class ViewUtil {
 
             mat.mapRect(drect, srect);
             faceView.addRect(drect);
-            faceView.addId(faceIdString.toString());
-            faceView.addRoll(faceRollString);
-            faceView.addPitch(facePitchString);
-            faceView.addYaw(faceYawString);
-            faceView.addBlur(faceBlurString);
-            faceView.addSmile(smileString);
+//            faceView.addId(faceIdString.toString());
+//            faceView.addRoll(faceRollString);
+//            faceView.addPitch(facePitchString);
+//            faceView.addYaw(faceYawString);
+//            faceView.addBlur(faceBlurString);
+//            faceView.addSmile(smileString);
         }
         faceView.invalidate();
     }

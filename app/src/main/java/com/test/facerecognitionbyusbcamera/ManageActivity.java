@@ -286,10 +286,12 @@ public class ManageActivity extends AppCompatActivity implements View.OnClickLis
                     System.out.println("授权不成功！");
                     // 授权不成功，根据业务需求处理
                 }  else {
-                    faceRecognition.setClickable(true);
-                    startFaceRegister.setClickable(true);
                     System.out.println("授权成功！");
-                    runOnUiThread(() -> { showToast(this, "获取设备授权成功"); });
+                    runOnUiThread(() -> {
+                        faceRecognition.setClickable(true);
+                        startFaceRegister.setClickable(true);
+                        showToast(this, "获取设备授权成功");
+                    });
                 }
             } catch (Exception e){
                 e.printStackTrace();

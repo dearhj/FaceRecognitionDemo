@@ -82,10 +82,6 @@ class RecognitionActivity : CameraActivity() {
         mFeedFrameThread!!.start()
         mRecognizeThread = RecognizeThread()
         mRecognizeThread!!.start()
-
-        viewBinding.faceView.clear()
-        viewBinding.faceView.invalidate()
-
         mContext = this
 
         return viewBinding.root
@@ -215,7 +211,7 @@ class RecognitionActivity : CameraActivity() {
                             viewBinding.faceView.invalidate()
                         }
                         mAndroidHandler?.postDelayed(runnableOff, 500)
-                    } else {
+                    } else if (isOpen) {
                         /* 将识别到的人脸在预览界面中圈出，并在上方显示人脸位置及角度信息 */
                         val bufferFaceList = detectionResult.trackedFaces
                         (mContext as Activity).runOnUiThread {
