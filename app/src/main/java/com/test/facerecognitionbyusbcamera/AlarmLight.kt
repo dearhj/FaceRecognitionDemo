@@ -9,7 +9,7 @@ import android.hardware.usb.UsbInterface
 import android.hardware.usb.UsbManager
 
 
-private lateinit var manager: UsbManager
+private var manager: UsbManager? = null
 var device: UsbDevice? = null
 private lateinit var usbInterface: UsbInterface
 private lateinit var usbConnection: UsbDeviceConnection
@@ -31,9 +31,11 @@ fun String.hexToByteArray(): ByteArray {
 }
 
 fun initAlarmLight(context: Context) {
-    manager = context.getSystemService(Context.USB_SERVICE) as UsbManager
-    device = getUsbDevices()
-    device?.let { flag = openPort(it) }
+    if (manager == null) {
+        manager = context.getSystemService(Context.USB_SERVICE) as UsbManager
+        device = getUsbDevices()
+        device?.let { flag = openPort(it) }
+    }
 }
 
 fun setRed() {
@@ -79,8 +81,8 @@ private fun checkDevice() {
 }
 
 fun getUsbDevices(): UsbDevice? {
-    val deviceList = manager.deviceList
-    deviceList.forEach {
+    val deviceList = manager?.deviceList
+    deviceList?.forEach {
         if (it.value.productId == 29987 && it.value.vendorId == 6790) {
             hasAlarmDevice = true
             return deviceList[it.value.deviceName]
@@ -89,15 +91,15 @@ fun getUsbDevices(): UsbDevice? {
     return null
 }
 
-private fun hasPermission(device: UsbDevice?): Boolean {
-    return manager.hasPermission(device)
+private fun hasPermission(device: UsbDevice?): Boolean? {
+    return manager?.hasPermission(device)
 }
 
 fun openPort(device: UsbDevice): Boolean {
     usbInterface = device.getInterface(0)
 
-    if (hasPermission(device)) {
-        usbConnection = manager.openDevice(device)
+    if (hasPermission(device)!!) {
+        usbConnection = manager!!.openDevice(device)
         if (usbConnection.claimInterface(usbInterface, true)) {
             println("TEST 找到了设备接口")
         } else {

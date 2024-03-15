@@ -29,6 +29,7 @@ import mcv.facepass.auth.AuthApi.ErrorCodeConfig;
 import mcv.facepass.types.FacePassConfig;
 import mcv.facepass.types.FacePassModel;
 import mcv.facepass.types.FacePassPose;
+
 import com.test.facerecognitionbyusbcamera.db.FaceDataBase;
 import com.test.facerecognitionbyusbcamera.db.FaceDataDao;
 
@@ -85,7 +86,6 @@ public class ManageActivity extends AppCompatActivity implements View.OnClickLis
         }
         faceRecognition.setClickable(false);
         startFaceRegister.setClickable(false);
-        initFaceHandler();
         initAlarmLight(this);
 
         database = FaceDataBase.Companion.create(this);
@@ -151,74 +151,59 @@ public class ManageActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void initFaceHandler() {
+        FacePassConfig config;
+        try {
+            /* 填入所需要的配置 */
+            config = new FacePassConfig();
+            config.LivenessModel = FacePassModel.initModel(getAssets(), getString(R.string.mcv_livenessrgb_A));
+            config.searchModel = FacePassModel.initModel(getAssets(), getString(R.string.mcv_feature_Ari));
+            config.poseBlurModel = FacePassModel.initModel(getAssets(), getString(R.string.mcv_poseblur_A));
+            config.postFilterModel = FacePassModel.initModel(getAssets(), getString(R.string.mcv_postfilter_A));
+            config.rcAttributeModel = FacePassModel.initModel(getAssets(), getString(R.string.mcv_rc_attribute_A));
+            config.detectModel = FacePassModel.initModel(getAssets(), getString(R.string.mcv_rk3568_det_A_det));
+            config.occlusionFilterModel = FacePassModel.initModel(getAssets(), getString(R.string.mcv_occlusion_B));
+            /* 送识别阈值参数 */
+            config.searchThreshold = 75f;
+            config.livenessThreshold = 80f; //单目推荐80
+            config.faceMinThreshold = 100;
+            config.poseThreshold = new FacePassPose(45f, 45f, 45);
+            config.blurThreshold = 0.8f;
+            config.lowBrightnessThreshold = 70f;
+            config.highBrightnessThreshold = 220f;
+            config.brightnessSTDThreshold = 80f;
+            config.rgbIrLivenessEnabled = false;
+            config.LivenessEnabled = true;
+            config.rcAttributeEnabled = true;
 
-        new Thread(() -> {
-            while (true) {
-                while (FacePassHandler.isAvailable()) {
-                    FacePassConfig config;
-                    try {
-                        /* 填入所需要的配置 */
-                        config = new FacePassConfig();
-                        config.LivenessModel = FacePassModel.initModel(getAssets(), getString(R.string.mcv_livenessrgb_A));
-                        config.searchModel = FacePassModel.initModel(getAssets(), getString(R.string.mcv_feature_Ari));
-                        config.poseBlurModel = FacePassModel.initModel(getAssets(), getString(R.string.mcv_poseblur_A));
-                        config.postFilterModel = FacePassModel.initModel(getAssets(), getString(R.string.mcv_postfilter_A));
-                        config.rcAttributeModel = FacePassModel.initModel(getAssets(), getString(R.string.mcv_rc_attribute_A));
-                        config.detectModel = FacePassModel.initModel(getAssets(), getString(R.string.mcv_rk3568_det_A_det));
-                        config.occlusionFilterModel = FacePassModel.initModel(getAssets(), getString(R.string.mcv_occlusion_B));
-                        /* 送识别阈值参数 */
-                        config.searchThreshold = 75f;
-                        config.livenessThreshold = 80f; //单目推荐80
-                        config.faceMinThreshold = 100;
-                        config.poseThreshold = new FacePassPose(45f, 45f, 45);
-                        config.blurThreshold = 0.8f;
-                        config.lowBrightnessThreshold = 70f;
-                        config.highBrightnessThreshold = 220f;
-                        config.brightnessSTDThreshold = 80f;
-                        config.rgbIrLivenessEnabled = false;
-                        config.LivenessEnabled = true;
-                        config.rcAttributeEnabled = true;
+            /* 其他设置 */
+            config.maxFaceEnabled = true;
+            config.retryCount = 5;
+            config.fileRootPath = FILE_ROOT_PATH;
 
-                        /* 其他设置 */
-                        config.maxFaceEnabled = true;
-                        config.retryCount = 5;
-                        config.fileRootPath = FILE_ROOT_PATH;
+            /* 创建SDK实例 */
+            mFacePassHandler = new FacePassHandler();
+            int code = FacePassHandler.initHandle(config);
+            if (code == 0) FacePassHandlerHasInit = true;
 
-                        /* 创建SDK实例 */
-                        mFacePassHandler = new FacePassHandler();
-                        int code = FacePassHandler.initHandle(config);
-                        if (code == 0) FacePassHandlerHasInit = true;
-
-                        Log.d("DEBUG_TAG", "初始化 -> " + (code == 0 ? "成功 " : ("错误 code = " + code)));
+            Log.d("DEBUG_TAG", "初始化 -> " + (code == 0 ? "成功 " : ("错误 code = " + code)));
 
 
-                        /* 入库阈值参数 */
-                        FacePassConfig addFaceConfig = mFacePassHandler.getAddFaceConfig();
-                        addFaceConfig.poseThreshold.pitch = 35f;
-                        addFaceConfig.poseThreshold.roll = 35f;
-                        addFaceConfig.poseThreshold.yaw = 35f;
-                        addFaceConfig.blurThreshold = 0.7f;
-                        addFaceConfig.lowBrightnessThreshold = 70f;
-                        addFaceConfig.highBrightnessThreshold = 220f;
-                        addFaceConfig.brightnessSTDThreshold = 60f;
-                        addFaceConfig.faceMinThreshold = 40;
-                        mFacePassHandler.setAddFaceConfig(addFaceConfig);
-                        checkGroup();
-                    } catch (FacePassException e) {
-                        e.printStackTrace();
-                        Log.d("DEBUG_TAG", "FacePassHandler is null");
-                        return;
-                    }
-                    return;
-                }
-                try {
-                    /* 如果SDK初始化未完成则需等待 */
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
+            /* 入库阈值参数 */
+            FacePassConfig addFaceConfig = mFacePassHandler.getAddFaceConfig();
+            addFaceConfig.poseThreshold.pitch = 35f;
+            addFaceConfig.poseThreshold.roll = 35f;
+            addFaceConfig.poseThreshold.yaw = 35f;
+            addFaceConfig.blurThreshold = 0.7f;
+            addFaceConfig.lowBrightnessThreshold = 70f;
+            addFaceConfig.highBrightnessThreshold = 220f;
+            addFaceConfig.brightnessSTDThreshold = 60f;
+            addFaceConfig.faceMinThreshold = 40;
+            mFacePassHandler.setAddFaceConfig(addFaceConfig);
+            checkGroup();
+        } catch (FacePassException e) {
+            e.printStackTrace();
+            Log.d("DEBUG_TAG", "FacePassHandler is null");
+        }
     }
 
     private void checkGroup() {
@@ -285,7 +270,8 @@ public class ManageActivity extends AppCompatActivity implements View.OnClickLis
                     });
                     System.out.println("授权不成功！");
                     // 授权不成功，根据业务需求处理
-                }  else {
+                } else {
+                    initFaceHandler();
                     System.out.println("授权成功！");
                     runOnUiThread(() -> {
                         faceRecognition.setClickable(true);
@@ -293,7 +279,7 @@ public class ManageActivity extends AppCompatActivity implements View.OnClickLis
                         showToast(this, "获取设备授权成功");
                     });
                 }
-            } catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }).start();

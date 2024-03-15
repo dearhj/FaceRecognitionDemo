@@ -31,6 +31,8 @@ class ItemChoose : AppCompatActivity(), View.OnClickListener {
         findViewById<TextView>(R.id.version).text =
             BuildConfig.BUILD_TYPE + "-" + BuildConfig.VERSION_NAME + "[" + convertUtcTimestampToLocalDateTime(
                 BuildConfig.BUILD_TIME) + "]"
+
+        initAlarmLight(this)
     }
 
     private fun convertUtcTimestampToLocalDateTime(utcTimestamp: Long): String {
