@@ -1,6 +1,8 @@
 package com.test.facerecognitionbyusbcamera
 
+//import com.zaz060.demo.ZazFingerMainActivity
 import android.annotation.SuppressLint
+import android.content.ComponentName
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -9,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.test.dkread.DkReadMainActivity
 import com.test.ledtest.LedTestMainActivity
 import com.test.lkread.LkReadMainActivity
+import com.zaz.demo.LdFingerMainActivity
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -23,10 +26,13 @@ class ItemChoose : AppCompatActivity(), View.OnClickListener {
         findViewById<TextView>(R.id.dk_read).setOnClickListener(this)
         findViewById<TextView>(R.id.lk_read).setOnClickListener(this)
         findViewById<TextView>(R.id.led_test).setOnClickListener(this)
-        findViewById<TextView>(R.id.zw_test).setOnClickListener(this)
+        findViewById<TextView>(R.id.zw_test_060).setOnClickListener(this)
+        findViewById<TextView>(R.id.zw_test_8800).setOnClickListener(this)
         findViewById<TextView>(R.id.version).text =
             BuildConfig.BUILD_TYPE + "-" + BuildConfig.VERSION_NAME + "[" + convertUtcTimestampToLocalDateTime(
                 BuildConfig.BUILD_TIME) + "]"
+
+        initAlarmLight(this)
     }
 
     private fun convertUtcTimestampToLocalDateTime(utcTimestamp: Long): String {
@@ -45,11 +51,19 @@ class ItemChoose : AppCompatActivity(), View.OnClickListener {
     override fun onClick(p0: View?) {
         var intent: Intent? = null
         when (p0?.id) {
-            R.id.face_camera -> intent = Intent(applicationContext, MainActivity::class.java)
+            R.id.face_camera -> intent = Intent(applicationContext, ManageActivity::class.java)
             R.id.dk_read -> intent = Intent(applicationContext, DkReadMainActivity::class.java)
             R.id.lk_read -> intent = Intent(applicationContext, LkReadMainActivity::class.java)
             R.id.led_test -> intent = Intent(applicationContext, LedTestMainActivity::class.java)
-            R.id.zw_test -> intent = Intent(applicationContext, MainActivity::class.java)
+            R.id.zw_test_060 -> {
+                intent = Intent()
+                intent.setAction(Intent.ACTION_MAIN)
+                intent.addCategory(Intent.CATEGORY_LAUNCHER)
+                val componentName = ComponentName("com.zaz060.demo", "com.zaz060.demo.MainActivity")
+                intent.setComponent(componentName)
+            }
+//            R.id.zw_test_060 -> intent = Intent(applicationContext, ZazFingerMainActivity::class.java)
+            R.id.zw_test_8800 -> intent = Intent(applicationContext, LdFingerMainActivity::class.java)
         }
         startActivity(intent)
     }

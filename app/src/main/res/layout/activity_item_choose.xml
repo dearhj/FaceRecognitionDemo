@@ -38,19 +38,27 @@
         android:text="LED灯模块"
         tools:ignore="MissingConstraints" />
     <TextView
-        android:id="@+id/zw_test"
+        android:id="@+id/zw_test_060"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:gravity="center"
         app:layout_constraintTop_toBottomOf="@+id/led_test"
-        android:text="指纹模块"
+        android:text="ZAZ-060指纹模块"
+        tools:ignore="MissingConstraints" />
+    <TextView
+        android:id="@+id/zw_test_8800"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@+id/zw_test_060"
+        android:text="LD8800指纹模块"
         tools:ignore="MissingConstraints" />
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="50dp"
         android:gravity="center"
-        app:layout_constraintTop_toBottomOf="@+id/zw_test"
+        app:layout_constraintTop_toBottomOf="@+id/zw_test_8800"
         android:text="D10R各模块测试程序\n点击各模块即可进入对应的测试界面" />
 
     <TextView

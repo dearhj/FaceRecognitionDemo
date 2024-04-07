@@ -43,4 +43,13 @@
     <string name="register_sucdess">Register success</string>
     <string name="powered_by_rockchip">Powered by Rockchip GPADC.</string>
     <string name="app_title">RockIVA Face Demo</string>
+
+    <string name="mcv_feature_Ari">models/mcv_feature_Ari.bin</string>
+    <string name="mcv_liveness_A">models/mcv_liveness_A.bin</string>
+    <string name="mcv_livenessrgb_A">models/mcv_livenessrgb_A.bin</string>
+    <string name="mcv_occlusion_B">models/mcv_occlusion_B.bin</string>
+    <string name="mcv_poseblur_A">models/mcv_poseblur_A.bin</string>
+    <string name="mcv_postfilter_A">models/mcv_postfilter_A.bin</string>
+    <string name="mcv_rc_attribute_A">models/mcv_rc_attribute_A.bin</string>
+    <string name="mcv_rk3568_det_A_det">models/mcv_rk3568_det_A_det.bin</string>
 </resources>

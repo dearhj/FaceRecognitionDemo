@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:scrollbarDefaultDelayBeforeFade="400"
+        android:weightSum="5">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:layout_weight="1"
+            android:src="@drawable/rk"/>
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:gravity="center_horizontal"
+            android:text="人脸识别程序"
+            android:textSize="30sp" />
+
+        <Button
+            android:id="@+id/button_face_recognition"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:background="@drawable/guide_button_function"
+            android:padding="30px"
+            android:text="人脸识别"
+            android:textColor="#fafafa"
+            android:textSize="18sp" />
+
+
+        <Button
+            android:id="@+id/button_face_register"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:background="@drawable/guide_button_function"
+            android:padding="30px"
+            android:text="人脸录入"
+            android:textColor="#fafafa"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

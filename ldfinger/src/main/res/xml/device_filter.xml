@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+     <!-- 总类别 mass storage 设备-->
+     <usb-device class="8" />
+    <!--
+    	idVendor:0x2009
+    	idProduct:0x7638
+	    Interface Descriptor
+	    bInterfaceClass:  0x08  -> This is a Mass Storage USB Device Interface Class
+		bInterfaceSubClass: 0x06
+		bInterfaceProtocol: 0x50
+	-->
+    <usb-device vendor-id="30264" product-id="8457"  />
+	
+</resources>

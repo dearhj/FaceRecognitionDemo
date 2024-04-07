@@ -18,7 +18,6 @@ dependencyResolutionManagement {
 }
 
 include ':app'
-include ':rockiva'
 include ':libausbc'
 include ':libuvc'
 
@@ -26,3 +25,5 @@ include ':lkread'
 include ':dkread'
 include ':usbNfc'
 include ':ledTest'
+include ':ldfinger'
+//include ':zazfinger'
