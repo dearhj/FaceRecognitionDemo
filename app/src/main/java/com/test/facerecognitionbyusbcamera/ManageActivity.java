@@ -164,7 +164,7 @@ public class ManageActivity extends AppCompatActivity implements View.OnClickLis
             config.occlusionFilterModel = FacePassModel.initModel(getAssets(), getString(R.string.mcv_occlusion_B));
             /* 送识别阈值参数 */
             config.searchThreshold = 75f;
-            config.livenessThreshold = 80f; //单目推荐80
+            config.livenessThreshold = 85f; //单目推荐80
             config.faceMinThreshold = 100;
             config.poseThreshold = new FacePassPose(45f, 45f, 45);
             config.blurThreshold = 0.8f;

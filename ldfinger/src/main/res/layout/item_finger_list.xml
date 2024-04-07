@@ -44,7 +44,7 @@
         android:layout_marginEnd="10dp"
         android:layout_toStartOf="@+id/del"
         android:textSize="18sp"
-        android:text="更新"/>
+        android:text="重命名"/>
 
     <TextView
         android:id="@+id/del"

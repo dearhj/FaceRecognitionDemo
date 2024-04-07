@@ -37,7 +37,7 @@ public class FaceView extends View {
         blurs = new ArrayList<>();
         smiles = new ArrayList<>();
         rect = new ArrayList<Rect>();
-        paint.setARGB(122, 255, 255, 255);
+        paint.setARGB(154, 255, 0, 0);
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeWidth(10.0f);
 
