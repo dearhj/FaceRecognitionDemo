@@ -3,27 +3,21 @@ package com.test.facerecognitionbyusbcamera
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
+import android.hardware.camera2.CameraAccessException
+import android.hardware.camera2.CameraManager
+import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import android.view.Gravity
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import com.jiangdg.ausbc.MultiCameraClient
-import com.jiangdg.ausbc.base.CameraActivity
-import com.jiangdg.ausbc.callback.ICameraStateCallBack
-import com.jiangdg.ausbc.callback.IPreviewDataCallBack
-import com.jiangdg.ausbc.camera.bean.CameraRequest
-import com.jiangdg.ausbc.render.env.RotateType
-import com.jiangdg.ausbc.utils.ToastUtils
-import com.jiangdg.ausbc.widget.AspectRatioTextureView
-import com.jiangdg.ausbc.widget.IAspectRatio
+import android.view.SurfaceView
+import android.view.WindowManager
+import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
+import com.test.facerecognitionbyusbcamera.ManageActivity.FacePassHandlerHasInit
 import com.test.facerecognitionbyusbcamera.ManageActivity.group_name
+import com.test.facerecognitionbyusbcamera.ManageActivity.isLocalGroupExist
 import com.test.facerecognitionbyusbcamera.ManageActivity.mFacePassHandler
-import com.test.facerecognitionbyusbcamera.ViewUtil.getFaceImageByFaceTokenByUvc
-import com.test.facerecognitionbyusbcamera.ViewUtil.showFacePassFaceByUvc
-import com.test.facerecognitionbyusbcamera.databinding.ActivityRecognitionBinding
+import com.test.facerecognitionbyusbcamera.RkCameraManager.CameraListener
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
@@ -38,23 +32,18 @@ import mcv.facepass.types.FacePassTrackOptions
 import mcv.facepass.types.FacePassTrackResult
 import java.util.concurrent.ArrayBlockingQueue
 
-
-//采用开源usb camera库
-class RecognitionActivity : CameraActivity() {
-
-    private lateinit var callBack: IPreviewDataCallBack
+class RecognitionByRkActivity : AppCompatActivity(), CameraListener {
+    private var mSurfaceView: SurfaceView? = null
+    private var mCameraManager: CameraManager? = null
 
     companion object {
-        private const val cameraWidth = 1280
-        private const val cameraHeight = 720
         private var mAndroidHandler: Handler? = null
 
         @SuppressLint("StaticFieldLeak")
         var mContext: Context? = null
+        var mFaceView: FaceView? = null
         var mDetectResultQueue: ArrayBlockingQueue<RecognizeData>? = null
 
-        @SuppressLint("StaticFieldLeak")
-        lateinit var viewBinding: ActivityRecognitionBinding
         val runnableRed = Runnable { setRed() }
         val runnableGreen = Runnable { setGreen() }
         val runnableOff = Runnable { setOff() }
@@ -64,75 +53,38 @@ class RecognitionActivity : CameraActivity() {
 
     private var mRecognizeThread: RecognizeThread? = null
     private var mFeedFrameThread: FeedFrameThread? = null
+    @SuppressLint("MissingInflatedId")
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        this.enableEdgeToEdge()
+        setContentView(R.layout.activity_recognition_by_rk)
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        mSurfaceView = findViewById(R.id.surfaceViewCamera1)
+        mFaceView = findViewById(R.id.faceView)
+        mCameraManager = getSystemService(CAMERA_SERVICE) as CameraManager
+        try {
+            val list = mCameraManager!!.cameraIdList
+            for (id in list) {
+                println("这里获取到的id是？   $id")
+            }
+            if (list.isNotEmpty()) {
+                val rkCameraManager = RkCameraManager.getInstance(this)
+                rkCameraManager.initCamera(list[0], mSurfaceView)
+                rkCameraManager.setListener(this)
+                isOpen = true
+                faceNum = mFacePassHandler.getLocalGroupInfo(group_name).size
 
-    override fun getCameraView(): IAspectRatio {
-        return AspectRatioTextureView(this)
-    }
-
-    override fun getCameraViewContainer(): ViewGroup {
-        return viewBinding.cameraViewContainer
-    }
-
-    override fun getRootView(layoutInflater: LayoutInflater): View {
-        viewBinding = ActivityRecognitionBinding.inflate(layoutInflater)
-        callBack = Callback()
-
-        mDetectResultQueue = ArrayBlockingQueue<RecognizeData>(5)
-        mAndroidHandler = Handler(Looper.getMainLooper())
-        mFeedFrameThread = FeedFrameThread()
-        mFeedFrameThread!!.start()
-        mRecognizeThread = RecognizeThread()
-        mRecognizeThread!!.start()
-        mContext = this
-
-        return viewBinding.root
-    }
-
-    override fun getGravity(): Int = Gravity.CENTER
-
-    override fun getCameraRequest(): CameraRequest {
-        // 5
-        return CameraRequest.Builder()
-            .setPreviewWidth(cameraWidth)
-            .setPreviewHeight(cameraHeight)
-            .setRenderMode(CameraRequest.RenderMode.OPENGL)
-            .setDefaultRotateType(RotateType.ANGLE_0)
-            .setAudioSource(CameraRequest.AudioSource.SOURCE_SYS_MIC)
-            .setAspectRatioShow(true)
-            .setCaptureRawImage(false)
-            .setRawPreviewData(false)
-            .create()
-    }
-
-    override fun onCameraState(
-        self: MultiCameraClient.ICamera,
-        code: ICameraStateCallBack.State,
-        msg: String?
-    ) {
-        when (code) {
-            ICameraStateCallBack.State.OPENED -> handleCameraOpened()
-            ICameraStateCallBack.State.CLOSED -> handleCameraClosed()
-            ICameraStateCallBack.State.ERROR -> handleCameraError(msg)
+                mDetectResultQueue = ArrayBlockingQueue<RecognizeData>(5)
+                mAndroidHandler = Handler(Looper.getMainLooper())
+                mFeedFrameThread = FeedFrameThread()
+                mFeedFrameThread!!.start()
+                mRecognizeThread = RecognizeThread()
+                mRecognizeThread!!.start()
+                mContext = this
+            }
+        } catch (e: CameraAccessException) {
+            e.printStackTrace()
         }
-    }
-
-    private fun handleCameraError(msg: String?) {
-        println("这里摄像头出错了")
-        ToastUtils.show("camera opened error: $msg")
-    }
-
-    private fun handleCameraClosed() {
-        println("这里摄像头关闭了")
-        ToastUtils.show("camera closed success")
-        removePreviewDataCallBack(callBack)
-    }
-
-    private fun handleCameraOpened() {
-        println("这里摄像头打开了")
-        isOpen = true
-        faceNum = mFacePassHandler.getLocalGroupInfo(group_name).size
-        ToastUtils.show("camera opened success")
-        addPreviewDataCallBack(callBack)
     }
 
     override fun onDestroy() {
@@ -140,8 +92,8 @@ class RecognitionActivity : CameraActivity() {
         setOff()
         mRecognizeThread!!.isInterrupt = true
         mFeedFrameThread!!.isInterrupt = true
-        viewBinding.faceView.clear()
-        viewBinding.faceView.invalidate()
+        mFaceView?.clear()
+        mFaceView?.invalidate()
         mFacePassHandler.reset()
         mDetectResultQueue!!.clear()
         ComplexFrameHelper.complexUvcFrameQueue.clear()
@@ -152,25 +104,18 @@ class RecognitionActivity : CameraActivity() {
     }
 
 
-    class Callback : IPreviewDataCallBack {
-        override fun onPreviewData(
-            data: ByteArray?,
-            width: Int,
-            height: Int,
-            format: IPreviewDataCallBack.DataFormat
-        ) {
-            MainScope().launch(Dispatchers.IO) {
-                ComplexFrameHelper.addUvcRgbFrame(data)
-            }
+    override fun onCameraPreviewData(cameraPreviewData: ByteArray) {
+        MainScope().launch(Dispatchers.IO) {
+            ComplexFrameHelper.addUvcRgbFrame(cameraPreviewData)
         }
     }
 
 
-    class FeedFrameThread : Thread() {
+    private class FeedFrameThread : Thread() {
         var isInterrupt = false
         override fun run() {
             while (!isInterrupt) {
-                if (ManageActivity.FacePassHandlerHasInit) {
+                if (FacePassHandlerHasInit) {
                     val framePair: ByteArray? = try {
                         ComplexFrameHelper.takeComplexUvcFrame()
                     } catch (e: InterruptedException) {
@@ -178,7 +123,6 @@ class RecognitionActivity : CameraActivity() {
                         continue
                     }
                     if (mFacePassHandler == null) {
-                        println("识别中  mFacePassHandler == null !")
                         continue
                     }
                     /* 将相机预览帧转成SDK算法所需帧的格式 FacePassImage */
@@ -186,8 +130,8 @@ class RecognitionActivity : CameraActivity() {
                     val imageRGB: FacePassImage = try {
                         FacePassImage(
                             framePair,
-                            cameraWidth,
-                            cameraHeight,
+                            1280,
+                            720,
                             0,
                             FacePassImageType.NV21
                         )
@@ -208,25 +152,24 @@ class RecognitionActivity : CameraActivity() {
 
                         /* 当前帧没有检出人脸 */
                         MainScope().launch(Dispatchers.Main) {
-                            viewBinding.faceView.clear()
-                            viewBinding.faceView.invalidate()
+                            mFaceView?.clear()
+                            mFaceView?.invalidate()
                         }
                         mAndroidHandler?.postDelayed(runnableOff, 500)
                     } else if (isOpen) {
                         /* 将识别到的人脸在预览界面中圈出，并在上方显示人脸位置及角度信息 */
                         val bufferFaceList = detectionResult.trackedFaces
                         (mContext as Activity).runOnUiThread {
-                            showFacePassFaceByUvc(bufferFaceList, viewBinding.faceView)
+                            ViewUtil.showFacePassFaceByUvc(
+                                bufferFaceList,
+                                mFaceView
+                            )
                         }
                     }
 
                     /*离线模式，将识别到人脸的，message不为空的result添加到处理队列中*/
                     if (detectionResult != null) {
                         /*所有检测到的人脸框的属性信息*/
-                        Log.d(
-                            "识别中",
-                            "--------------------------------------------------------------------------------------------------------------------------------------------------"
-                        )
                         println("人脸识别中，detectionResult.message是否不为空 " + (detectionResult.message.isNotEmpty()))
                         if (detectionResult.message.isNotEmpty() && isOpen) {
                             /*送识别的人脸框的属性信息*/
@@ -250,10 +193,6 @@ class RecognitionActivity : CameraActivity() {
                                     )
                                 }
                             }
-                            Log.d(
-                                "识别中",
-                                "mRecognizeDataQueue.offer(mRecData);"
-                            )
                             val mRecData = RecognizeData(
                                 detectionResult.message,
                                 trackOpts
@@ -272,10 +211,8 @@ class RecognitionActivity : CameraActivity() {
         override fun run() {
             while (!isInterrupt) {
                 try {
-                    println("人脸识别中，开始执行识别线程。。")
                     val recognizeData: RecognizeData = mDetectResultQueue!!.take()
-                    println("人脸识别中，，，，，， MyApplication.isLocalGroupExist " + ManageActivity.isLocalGroupExist)
-                    if (ManageActivity.isLocalGroupExist) {
+                    if (isLocalGroupExist) {
 
                         val liveNessResult = recognizeData.trackOpt!![0]?.let {
                             mFacePassHandler.livenessClassify(recognizeData.message, it.trackId, FacePassLivenessMode.FP_REG_MODE_LIVENESS, it.livenessThreshold)
@@ -288,7 +225,6 @@ class RecognitionActivity : CameraActivity() {
                                 if(result.livenessState == 2) liveNessStat = "LIVENESS_RETRY_EXPIRED"
                                 if(result.livenessState == 3) liveNessStat = "LIVENESS_TRACK_MISSING"
                                 if(result.livenessState == 4) liveNessStat = "LIVENESS_UNPASS"
-                                println("这里的活体结果是？？？？ " + result.livenessState)
                             }
                         }
                         if(liveNessStat == "LIVENESS_PASS" && isOpen) {
@@ -305,7 +241,6 @@ class RecognitionActivity : CameraActivity() {
                                     FacePassRecogMode.FP_REG_MODE_FEAT_COMP
                                 )
                             }
-                            println("人脸识别中，这里的值是 ${recognizeData.trackOpt!![0]!!.livenessThreshold}    ${recognizeData.trackOpt!![0]!!.searchThreshold}")
                             //这里有人脸送入识别，准备亮红灯。
                             if (!recognizeResult.isNullOrEmpty() && isOpen) {
                                 for (result in recognizeResult) {
@@ -315,10 +250,6 @@ class RecognitionActivity : CameraActivity() {
                                     }
                                     println("人脸识别中？？？？  有识别结果。。。。 result.recognitionState  " + result.recognitionState)
                                     val faceToken = String(result.faceToken)
-                                    Log.d(
-                                        "人脸识别中",
-                                        "FacePassRecognitionState.RECOGNITION_PASS = " + result.recognitionState
-                                    )
                                     if (result.recognitionState != FacePassRecognitionState.RECOGNITION_PASS && result.recognitionState != FacePassRecognitionState.RECOGNITION_RETRY && isOpen) {
                                         mAndroidHandler?.removeCallbacks(runnableOff)
                                         mAndroidHandler?.post(runnableRed)
@@ -328,7 +259,7 @@ class RecognitionActivity : CameraActivity() {
                                         mAndroidHandler?.removeCallbacks(runnableOff)
                                         mAndroidHandler?.post(runnableGreen)
                                         (mContext as Activity).runOnUiThread {
-                                            getFaceImageByFaceTokenByUvc(
+                                            ViewUtil.getFaceImageByFaceTokenByUvc(
                                                 mContext,
                                                 mContext as Activity,
                                                 faceToken
@@ -351,5 +282,4 @@ class RecognitionActivity : CameraActivity() {
     class RecognizeData(var message: ByteArray, opt: Array<FacePassTrackOptions?>) {
         var trackOpt: Array<FacePassTrackOptions?>? = opt
     }
-
 }

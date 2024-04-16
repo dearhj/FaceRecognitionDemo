@@ -245,7 +245,10 @@ public class ManageActivity extends AppCompatActivity implements View.OnClickLis
         Intent intent = null;
 
         if (id == R.id.button_face_recognition) {
-            intent = new Intent(getApplicationContext(), RecognitionActivity.class);
+            //采用第三方开源USB Camera库方案
+//            intent = new Intent(getApplicationContext(), RecognitionActivity.class);
+            //采用RK平台自带的USB Camera API接口方案
+            intent = new Intent(getApplicationContext(), RecognitionByRkActivity.class);
         } else if (id == R.id.button_face_register) {
             intent = new Intent(getApplicationContext(), FaceManageActivity.class);
         }
