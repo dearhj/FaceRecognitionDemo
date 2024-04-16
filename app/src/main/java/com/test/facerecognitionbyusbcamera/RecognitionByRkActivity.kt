@@ -90,15 +90,15 @@ class RecognitionByRkActivity : AppCompatActivity(), CameraListener {
     override fun onDestroy() {
         isOpen = false
         setOff()
-        mRecognizeThread!!.isInterrupt = true
-        mFeedFrameThread!!.isInterrupt = true
+        mRecognizeThread?.isInterrupt = true
+        mFeedFrameThread?.isInterrupt = true
         mFaceView?.clear()
         mFaceView?.invalidate()
         mFacePassHandler.reset()
-        mDetectResultQueue!!.clear()
+        mDetectResultQueue?.clear()
         ComplexFrameHelper.complexUvcFrameQueue.clear()
         if (mAndroidHandler != null) {
-            mAndroidHandler!!.removeCallbacksAndMessages(null)
+            mAndroidHandler?.removeCallbacksAndMessages(null)
         }
         super.onDestroy()
     }
