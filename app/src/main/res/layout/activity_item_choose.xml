@@ -19,7 +19,7 @@
         android:layout_height="50dp"
         android:gravity="center"
         app:layout_constraintTop_toBottomOf="@+id/face_camera"
-        android:text="德科读卡器模块"
+        android:text="LK01读卡器模块"
         tools:ignore="MissingConstraints" />
     <TextView
         android:id="@+id/lk_read"
@@ -27,7 +27,7 @@
         android:layout_height="50dp"
         android:gravity="center"
         app:layout_constraintTop_toBottomOf="@+id/dk_read"
-        android:text="莱卡读卡器模块"
+        android:text="DK01读卡器模块"
         tools:ignore="MissingConstraints" />
     <TextView
         android:id="@+id/led_test"
@@ -43,7 +43,7 @@
         android:layout_height="50dp"
         android:gravity="center"
         app:layout_constraintTop_toBottomOf="@+id/led_test"
-        android:text="ZAZ-060指纹模块"
+        android:text="ZAZ060指纹模块"
         tools:ignore="MissingConstraints" />
     <TextView
         android:id="@+id/zw_test_8800"
