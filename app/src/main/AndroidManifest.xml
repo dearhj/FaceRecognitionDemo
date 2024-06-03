@@ -46,7 +46,7 @@
         <activity
             android:name=".ManageActivity"
             android:exported="true"
-            android:screenOrientation="landscape"></activity>
+            android:screenOrientation="landscape"/>
         <activity
             android:name=".RecognitionActivity"
             android:exported="false"

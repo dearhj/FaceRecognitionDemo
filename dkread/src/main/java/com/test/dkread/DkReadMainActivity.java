@@ -690,8 +690,8 @@ public class DkReadMainActivity extends Activity {
                     @Override
                     public void run() {
                         try {
-                            //打开/关闭自动寻卡，100ms间隔，寻M1/UL卡
-                            boolean isSuc = usbNfcDevice.startAutoSearchCard((byte) 20, ISO14443_P4);
+                            //打开/关闭自动寻卡，寻M1/UL卡  寻卡间隔500毫秒。
+                            boolean isSuc = usbNfcDevice.startAutoSearchCard((byte) 50, ISO14443_P4);
                             if (isSuc) {
                                 logViewln(null);
                                 logViewln("自动寻卡已打开！");
@@ -863,6 +863,12 @@ public class DkReadMainActivity extends Activity {
 
         if (readWriteDialog != null) {
             readWriteDialog.dismiss();
+        }
+        try {
+            //关闭自动寻卡功能。
+            usbNfcDevice.stoptAutoSearchCard();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         //销毁

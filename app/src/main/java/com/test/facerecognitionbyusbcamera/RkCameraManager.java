@@ -237,7 +237,7 @@ public class RkCameraManager {
             }
         });
         //imageReader通过将得到的图片存放在队列中，再取出来进行操作
-        //队列满了就不再放入新的图片，设置图片队列大小为10
+        //队列满了就不再放入新的图片，设置图片队列大小为2
         imageReader = ImageReader.newInstance(mPrevWidth, mPrevHeight, ImageFormat.YUV_420_888, 2);
         imageReader.setOnImageAvailableListener(reader -> {
             //取出最新的图片并清除队列里的旧图片
