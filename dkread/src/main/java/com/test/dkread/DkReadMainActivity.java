@@ -22,6 +22,7 @@ import com.dk.log.DKLogCallback;
 import com.dk.usbNfc.Card.CpuCard;
 import com.dk.usbNfc.Card.DESFire;
 import com.dk.usbNfc.Card.FeliCa;
+import com.dk.usbNfc.Card.I125KCard;
 import com.dk.usbNfc.Card.Iso15693Card;
 import com.dk.usbNfc.Card.Mifare;
 import com.dk.usbNfc.Card.Ntag21x;
@@ -536,6 +537,11 @@ public class DkReadMainActivity extends Activity {
                 if (topaz != null) {
                     logViewln("寻到T1T卡->UID:" + topaz.uidToString() + "");
                 }
+                break;
+            case DeviceManager.CARD_TYPE_125K:
+                final I125KCard i125KCard = (I125KCard) usbNfcDevice.getCard();
+                System.out.println(" USBDK   寻到125K卡" + (i125KCard != null));
+                logViewln("寻到CARD_TYPE_125K卡->UID:  " + i125KCard.uidToString() );
                 break;
         }
         return true;

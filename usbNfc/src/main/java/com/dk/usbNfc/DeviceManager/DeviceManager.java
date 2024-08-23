@@ -12,6 +12,7 @@ import com.dk.log.DKLog;
 import com.dk.usbNfc.Card.CpuCard;
 import com.dk.usbNfc.Card.DESFire;
 import com.dk.usbNfc.Card.FeliCa;
+import com.dk.usbNfc.Card.I125KCard;
 import com.dk.usbNfc.Card.Iso14443bCard;
 import com.dk.usbNfc.Card.Iso15693Card;
 import com.dk.usbNfc.Card.Mifare;
@@ -53,6 +54,7 @@ public class DeviceManager {
     public Ultralight ultralight;
     public FeliCa feliCa;
     public Topaz topaz;
+    public I125KCard i125KCard;
     public int mCardType;
 
     public onReceiveBatteryVoltageDeviceListener mOnReceiveBatteryVoltageDeviceListener;
@@ -147,6 +149,8 @@ public class DeviceManager {
                 return desFire;
             case CARD_TYPE_T1T:
                 return topaz;
+            case CARD_TYPE_125K:
+                return i125KCard;
             default:
                 return null;
         }
@@ -629,6 +633,7 @@ public class DeviceManager {
                             uidBytes = new byte[5];
                             System.arraycopy(rcvBytes, 1, uidBytes, 0, 5);
                             atrBytes = null;
+                            i125KCard = new I125KCard(DeviceManager.this, uidBytes, atrBytes);
                         }
                         else {
                             uidBytes = null;
